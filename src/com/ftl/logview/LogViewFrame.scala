@@ -20,6 +20,9 @@ import javax.swing.Timer
 
 class LogViewFrame extends MainFrame {
 
+  val refreshText = "Automatic refresh"
+  val refreshRate = 5
+
   val windowSizeX = 800
   val windowSizeY = 600
 
@@ -27,13 +30,21 @@ class LogViewFrame extends MainFrame {
   val workingArea: TextArea = new TextArea
 
   val automaticRefreshCheckbox: CheckBox = new CheckBox
-  
-  val refreshTimer: Timer = new Timer(2000, new java.awt.event.ActionListener {
-      def actionPerformed(e: java.awt.event.ActionEvent) {
-        println (" refresh")
+
+  val refreshTimer: Timer = new Timer(1000, new java.awt.event.ActionListener {
+    var counter = 0
+    def actionPerformed(e: java.awt.event.ActionEvent) {
+      println(" timer" )
+
+      if (counter / refreshRate == 1) {
+        counter = 0
         refreshData
+      } else {
+        counter += 1
       }
-    })
+      automaticRefreshCheckbox.text = refreshText + " in " + (refreshRate - counter)
+    }
+  })
 
   def this(fileToOpen: File) {
     this
@@ -92,20 +103,22 @@ class LogViewFrame extends MainFrame {
       reactions += {
         case ButtonClicked(`automaticRefreshCheckbox`) =>
           if (automaticRefreshCheckbox.selected) {
-        	  refreshTimer.start()
+            refreshTimer.start()
           } else {
-        	  refreshTimer.stop()
+            createAutomaticRefreshCheckbox
+            refreshTimer.stop()
           }
       }
     }
   }
 
   private def createAutomaticRefreshCheckbox: CheckBox = {
-    automaticRefreshCheckbox.text = "Automatic refresh"
+    automaticRefreshCheckbox.text = refreshText
     automaticRefreshCheckbox
   }
 
   private def refreshData {
+    println("refresh")
     workingArea.text = ""
     for (line <- Source.fromFile(file).getLines()) {
       workingArea.append(line + "\n")
