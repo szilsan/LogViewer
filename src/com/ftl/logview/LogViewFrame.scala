@@ -17,24 +17,29 @@ import scala.swing.BorderPanel
 import scala.swing.FlowPanel
 import scala.swing.event.ButtonClicked
 import javax.swing.Timer
+import java.io.RandomAccessFile
+import scala.swing.Button
 
 class LogViewFrame extends MainFrame {
 
-  val refreshText = "Automatic refresh"
+  val refreshText = "Automatic refresh [tail] "
   val refreshRate = 5
 
   val windowSizeX = 800
   val windowSizeY = 600
 
   var file: File = null
+  var filePosition: Long = 0
+
   val workingArea: TextArea = new TextArea
 
   val automaticRefreshCheckbox: CheckBox = new CheckBox
+  val forceRefreshButton: Button = new Button("Force refresh")
 
   val refreshTimer: Timer = new Timer(1000, new java.awt.event.ActionListener {
     var counter = 0
     def actionPerformed(e: java.awt.event.ActionEvent) {
-      println(" timer" )
+      println(" timer")
 
       if (counter / refreshRate == 1) {
         counter = 0
@@ -97,8 +102,9 @@ class LogViewFrame extends MainFrame {
   private def createSouthArea: Panel = {
     new FlowPanel {
       contents += createAutomaticRefreshCheckbox
+      contents += forceRefreshButton
 
-      listenTo(automaticRefreshCheckbox)
+      listenTo(automaticRefreshCheckbox, forceRefreshButton)
 
       reactions += {
         case ButtonClicked(`automaticRefreshCheckbox`) =>
@@ -107,6 +113,15 @@ class LogViewFrame extends MainFrame {
           } else {
             createAutomaticRefreshCheckbox
             refreshTimer.stop()
+          }
+        case ButtonClicked(`forceRefreshButton`) =>
+          val isRunning = refreshTimer.isRunning()
+          refreshTimer.stop()
+          workingArea.text = ""
+          filePosition = 0
+          refreshData
+          if (isRunning) {
+            refreshTimer.start()
           }
       }
     }
@@ -117,11 +132,23 @@ class LogViewFrame extends MainFrame {
     automaticRefreshCheckbox
   }
 
+  private def createForceRefreshButton: Button = {
+    forceRefreshButton
+  }
+
   private def refreshData {
-    println("refresh")
-    workingArea.text = ""
-    for (line <- Source.fromFile(file).getLines()) {
-      workingArea.append(line + "\n")
-    }
+    val raf: RandomAccessFile = new RandomAccessFile(file.getAbsoluteFile(), "r")
+    raf.seek(filePosition)
+
+    var line: String = null
+    do {
+      line = raf.readLine()
+      if (line != null) {
+        workingArea.append(line + "\n")
+      }
+    } while (line != null)
+
+    filePosition = raf.getFilePointer()
+    raf.close()
   }
 }
