@@ -29,6 +29,10 @@ import javax.swing.text.Style
 import javax.swing.text.StyleConstants
 import java.awt.Color
 import java.io.IOException
+import scala.swing.Dialog
+import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.HashMap
+import scala.collection.Map
 
 class LogViewFrame extends MainFrame {
 
@@ -40,12 +44,17 @@ class LogViewFrame extends MainFrame {
 
   // file handling
   var file: File = null
+  var fileProperties: File = null
   var filePosition: Long = 0
 
   // for highlighting
   val sc = DocumentHandler.sc
   var doc: DefaultStyledDocument = new DefaultStyledDocument(sc);
   val editorPane: JTextPane = createTextPane
+  var styles = Map.empty[String, String]
+
+  // for skipping
+  var skippedList = new ListBuffer[String]
 
   // refresh
   val automaticRefreshCheckbox: CheckBox = new CheckBox
@@ -63,7 +72,7 @@ class LogViewFrame extends MainFrame {
     }
   })
 
-  def this(fileToOpen: File) {
+  def this(fileToOpen: File, fileProperties: File) {
     this
 
     centerOnScreen
@@ -77,7 +86,9 @@ class LogViewFrame extends MainFrame {
     contents = createGui
     require(fileToOpen != null)
     file = fileToOpen
+    this.fileProperties = fileProperties
     title = "LogViewer - " + file.getAbsoluteFile()
+    if (fileProperties != null) propertiesHandling()
     refreshData
   }
 
@@ -91,19 +102,46 @@ class LogViewFrame extends MainFrame {
         line = raf.readLine()
         if (line != null) {
           filePosition = raf.getFilePointer()
-//          editorPane.setText(editorPane.getText() + line + "\n")
-          doc.insertString(doc.getLength(), line+"\n", null)
+          doc.insertString(doc.getLength(), line + "\n", null)
         }
       } while (line != null)
 
       raf.close()
     } catch {
       case ioex: IOException => {
-    	  
+        Dialog.showMessage(null, "Error: " + ioex.getMessage(), "Error", Dialog.Message.Error)
         return
       }
     }
-    DocumentHandler.highlightText(doc, sc, editorPane.getText())
+    editorPane.setText(DocumentHandler.deleteSkippedTexts(editorPane.getText(), skippedList.toList))
+    DocumentHandler.highlightText(doc, sc, styles, editorPane.getText())
+  }
+
+  def propertiesHandling() {
+    try {
+      for (line <- Source.fromFile(fileProperties).getLines()) {
+        if (line.startsWith("skip")) {
+          skippedList += line.substring(line.indexOf("=") + 1).trim()
+        }
+        if (line.startsWith("style")) {
+          var name = line.substring(0, line.indexOf("="))
+          var parameters = line.substring(line.indexOf("=") + 1).trim().split(",")
+
+          var fg: Color = new Color(Integer.parseInt(parameters(0).trim(), 16))
+          var bg: Color = new Color(Integer.parseInt(parameters(1).trim(), 16))
+          var exp = parameters(2)
+
+          var s = sc.addStyle(name, null)
+          DocumentHandler.configureStyle(s, bg, fg)
+          styles += (name -> exp)
+        }
+      }
+    } catch {
+      case ioex: IOException => {
+        Dialog.showMessage(null, "Error: " + ioex.getMessage(), "Error", Dialog.Message.Error)
+        return
+      }
+    }
   }
 
   // GUI
