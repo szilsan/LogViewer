@@ -19,6 +19,16 @@ import scala.swing.event.ButtonClicked
 import javax.swing.Timer
 import java.io.RandomAccessFile
 import scala.swing.Button
+import scala.swing.Component
+import javax.swing.JEditorPane
+import scala.swing.Swing
+import javax.swing.JTextPane
+import javax.swing.text.StyleContext
+import javax.swing.text.DefaultStyledDocument
+import javax.swing.text.Style
+import javax.swing.text.StyleConstants
+import java.awt.Color
+import java.io.IOException
 
 class LogViewFrame extends MainFrame {
 
@@ -28,19 +38,21 @@ class LogViewFrame extends MainFrame {
   val windowSizeX = 800
   val windowSizeY = 600
 
+  // file handling
   var file: File = null
   var filePosition: Long = 0
 
-  val workingArea: TextArea = new TextArea
+  // for highlighting
+  val sc = DocumentHandler.sc
+  var doc: DefaultStyledDocument = new DefaultStyledDocument(sc);
+  val editorPane: JTextPane = createTextPane
 
+  // refresh
   val automaticRefreshCheckbox: CheckBox = new CheckBox
   val forceRefreshButton: Button = new Button("Force refresh")
-
   val refreshTimer: Timer = new Timer(1000, new java.awt.event.ActionListener {
     var counter = 0
     def actionPerformed(e: java.awt.event.ActionEvent) {
-      println(" timer")
-
       if (counter / refreshRate == 1) {
         counter = 0
         refreshData
@@ -62,20 +74,39 @@ class LogViewFrame extends MainFrame {
         System.exit(0)
       }
     }
-
     contents = createGui
-
     require(fileToOpen != null)
     file = fileToOpen
-
     title = "LogViewer - " + file.getAbsoluteFile()
-
-    println("File: " + file.getAbsoluteFile())
-
     refreshData
-
   }
 
+  private def refreshData {
+    try {
+      val raf: RandomAccessFile = new RandomAccessFile(file.getAbsoluteFile(), "r")
+      raf.seek(filePosition)
+
+      var line: String = null
+      do {
+        line = raf.readLine()
+        if (line != null) {
+          filePosition = raf.getFilePointer()
+//          editorPane.setText(editorPane.getText() + line + "\n")
+          doc.insertString(doc.getLength(), line+"\n", null)
+        }
+      } while (line != null)
+
+      raf.close()
+    } catch {
+      case ioex: IOException => {
+    	  
+        return
+      }
+    }
+    DocumentHandler.highlightText(doc, sc, editorPane.getText())
+  }
+
+  // GUI
   private def createGui: Panel = {
     new BorderPanel {
 
@@ -87,7 +118,7 @@ class LogViewFrame extends MainFrame {
   }
 
   private def createCenterArea: ScrollPane = {
-    new ScrollPane(workingArea) {
+    new ScrollPane(createTextPanel) {
       preferredSize = new Dimension(windowSizeX, windowSizeY)
       opaque = true
     }
@@ -115,14 +146,16 @@ class LogViewFrame extends MainFrame {
             refreshTimer.stop()
           }
         case ButtonClicked(`forceRefreshButton`) =>
+          forceRefreshButton.enabled = false
           val isRunning = refreshTimer.isRunning()
           refreshTimer.stop()
-          workingArea.text = ""
+          editorPane.setText("")
           filePosition = 0
           refreshData
           if (isRunning) {
             refreshTimer.start()
           }
+          forceRefreshButton.enabled = true
       }
     }
   }
@@ -136,19 +169,12 @@ class LogViewFrame extends MainFrame {
     forceRefreshButton
   }
 
-  private def refreshData {
-    val raf: RandomAccessFile = new RandomAccessFile(file.getAbsoluteFile(), "r")
-    raf.seek(filePosition)
+  private def createTextPanel: Component = new Component() {
+    override lazy val peer: JEditorPane = editorPane
+  }
 
-    var line: String = null
-    do {
-      line = raf.readLine()
-      if (line != null) {
-        workingArea.append(line + "\n")
-      }
-    } while (line != null)
-
-    filePosition = raf.getFilePointer()
-    raf.close()
+  private def createTextPane: JTextPane = new JTextPane(doc) {
+    setEditable(false)
+    setBorder(Swing.EmptyBorder(5))
   }
 }
