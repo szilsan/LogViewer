@@ -129,7 +129,7 @@ class LogViewFrame extends MainFrame {
 
           var fg: Color = new Color(Integer.parseInt(parameters(0).trim(), 16))
           var bg: Color = new Color(Integer.parseInt(parameters(1).trim(), 16))
-          var exp = parameters(2)
+          var exp = parameters(2).trim()
 
           var s = sc.addStyle(name, null)
           DocumentHandler.configureStyle(s, bg, fg)
