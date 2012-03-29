@@ -19,11 +19,10 @@ object StyleUtil {
     StyleConstants.setBackground(style, bg.getOrElse(Color.WHITE))
   }
 
-  def addStyle(sc: StyleContext, name: String, fg: Color, bg: Color): Style = {
+  def addStyle(sc: StyleContext, name: String, fg: Color, bg: Color) {
     require(sc != null && sc != None)
-    var s = sc.addStyle(name, null)
-    StyleUtil.configureStyle(s, Some(bg), Some(fg))
-    s
+    
+    StyleUtil.configureStyle(sc.addStyle(name, null), Some(bg), Some(fg))
   }
 
 }
