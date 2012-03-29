@@ -33,6 +33,8 @@ import scala.swing.Dialog
 import scala.collection.mutable.ListBuffer
 import scala.collection.mutable.HashMap
 import scala.collection.Map
+import com.ftl.logview.logic.TextUtil
+import com.ftl.logview.logic.StyleUtil
 
 class LogViewFrame extends MainFrame {
 
@@ -113,7 +115,7 @@ class LogViewFrame extends MainFrame {
         return
       }
     }
-    editorPane.setText(DocumentHandler.deleteSkippedTexts(editorPane.getText(), skippedList.toList))
+    editorPane.setText(TextUtil.deleteSkippedTexts(editorPane.getText(), skippedList.toList))
     DocumentHandler.highlightText(doc, sc, styles, editorPane.getText())
   }
 
@@ -132,7 +134,7 @@ class LogViewFrame extends MainFrame {
           var exp = parameters(2).trim()
 
           var s = sc.addStyle(name, null)
-          DocumentHandler.configureStyle(s, bg, fg)
+          StyleUtil.configureStyle(s, Some(bg), Some(fg))
           styles += (name -> exp)
         }
       }

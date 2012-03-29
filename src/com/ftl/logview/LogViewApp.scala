@@ -4,7 +4,7 @@ import java.awt.Dimension
 import java.io.File
 
 /*
- * Here comes the sun... so the main objevct to start the app
+ * Here comes the sun... so this is the main object to start the app
  * 
  */
 object LogViewApp extends SwingApplication {
