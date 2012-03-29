@@ -2,6 +2,7 @@ package com.ftl.logview.logic
 import javax.swing.text.StyleConstants
 import javax.swing.text.Style
 import java.awt.Color
+import javax.swing.text.StyleContext
 
 /*
  * Util methods for style handling
@@ -16,6 +17,13 @@ object StyleUtil {
 
     StyleConstants.setForeground(style, fg.getOrElse(Color.BLACK))
     StyleConstants.setBackground(style, bg.getOrElse(Color.WHITE))
+  }
+
+  def addStyle(sc: StyleContext, name: String, fg: Color, bg: Color): Style = {
+    require(sc != null && sc != None)
+    var s = sc.addStyle(name, null)
+    StyleUtil.configureStyle(s, Some(bg), Some(fg))
+    s
   }
 
 }
