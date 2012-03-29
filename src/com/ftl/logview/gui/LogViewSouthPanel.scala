@@ -4,6 +4,7 @@ import scala.swing.event.ButtonClicked
 import scala.swing.Button
 import scala.swing.CheckBox
 import scala.swing.FlowPanel
+import scala.collection.JavaConversions._
 
 import com.ftl.logview.LogViewBundle
 
@@ -23,6 +24,7 @@ class LogViewSouthPanel(bundle: LogViewBundle) extends FlowPanel {
   val refreshTimer: Timer = new Timer(1000, new java.awt.event.ActionListener {
     var counter = 0
     def actionPerformed(e: java.awt.event.ActionEvent) {
+
       if (counter / refreshRate == 1) {
         counter = 0
         bundle.logViewFrame.refreshData
