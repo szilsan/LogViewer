@@ -11,9 +11,6 @@ import com.ftl.logview.gui.LogViewMainFrame
  */
 object LogViewApp extends SwingApplication {
 
-  var fLog: File = null
-  var fProperties: File = null
-
   override def startup(args: Array[String]) {
 
     // argument is needed
@@ -23,17 +20,18 @@ object LogViewApp extends SwingApplication {
     }
 
     // log file
-    fLog = resourceFromUserDirectory(args(0))
+    val fLog = resourceFromUserDirectory(args(0))
     fileCheck(fLog)
 
     // properties file
+    var fProperties:File = null 
     if (args.length == 2) {
       fProperties = resourceFromUserDirectory(args(1))
       fileCheck(fProperties)
     }
 
     // create first log viewer
-    val firstLogTab = new LogViewBundle(fLog, Some(fProperties))
+    new LogViewBundle(fLog, Some(fProperties))
 
     // view
     LogViewMainFrame.pack()

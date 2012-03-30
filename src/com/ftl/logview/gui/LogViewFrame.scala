@@ -14,7 +14,10 @@ class LogViewFrame(viewBundle: LogViewBundle) extends BorderPanel {
 
   // GUI init
   createGui
-  LogViewMainFrame.tabbedPane.pages += new TabbedPane.Page(viewBundle.logFile.getName(), this, viewBundle.logFile.getAbsolutePath())
+  var page = new TabbedPane.Page(viewBundle.logFile.getName(), this, viewBundle.logFile.getAbsolutePath())
+  LogViewMainFrame.tabAndBundle.put(page, viewBundle)
+  
+  LogViewMainFrame.tabbedPane.pages += page
   
   // init data
   refreshData
