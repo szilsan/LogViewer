@@ -13,3 +13,5 @@ getProperties():        {imqDestinationName=EquationQ, imqDestinationDescription
 
 logback pattern:
 %d{HH:mm:ss.SSS} %-5level %logger{48} [%thread] - %msg%n
+
+alma

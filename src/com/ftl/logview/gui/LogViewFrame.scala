@@ -4,7 +4,6 @@ import scala.swing.BorderPanel
 import scala.swing.TabbedPane
 
 import com.ftl.logview.LogViewBundle
-import com.ftl.logview.LogViewMainFrame
 
 class LogViewFrame(viewBundle: LogViewBundle) extends BorderPanel {
 
@@ -12,11 +11,10 @@ class LogViewFrame(viewBundle: LogViewBundle) extends BorderPanel {
   // panels
   val logViewPanel = new LogViewPanel(viewBundle)
   val logViewSouthPanel = new LogViewSouthPanel(viewBundle)
-  val title = viewBundle.logFile.getAbsolutePath()
 
   // GUI init
   createGui
-  LogViewMainFrame.tabbedPane.pages += new TabbedPane.Page(title, this)
+  LogViewMainFrame.tabbedPane.pages += new TabbedPane.Page(viewBundle.logFile.getName(), this, viewBundle.logFile.getAbsolutePath())
   
   // init data
   refreshData

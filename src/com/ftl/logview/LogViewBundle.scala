@@ -17,7 +17,7 @@ import logic.StyleUtil
 /**
  * Contains everything for one log file handling
  */
-class LogViewBundle(lf: File, pf: File) {
+class LogViewBundle(lf: File, pf: Option[File]) {
 
   require(lf != null && lf != None)
 
@@ -29,7 +29,9 @@ class LogViewBundle(lf: File, pf: File) {
 
   var skippedList = new ListBuffer[String]
   var styles = Map.empty[String, String]
-  propertiesHandling()
+  if (!propertyFile.isEmpty) {
+    propertiesHandling()
+  }
 
   // watcher for log file changing
   def logFileWatcher = new FileChangeWatcher(logFile)
@@ -42,7 +44,7 @@ class LogViewBundle(lf: File, pf: File) {
    */
   def propertiesHandling() {
     try {
-      for (line <- Source.fromFile(propertyFile).getLines()) {
+      for (line <- Source.fromFile(propertyFile.get).getLines()) {
         if (line.startsWith("skip")) {
           skippedList += line.substring(line.indexOf("=") + 1).trim()
         }

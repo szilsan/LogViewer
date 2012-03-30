@@ -3,6 +3,8 @@ import java.io.File
 
 import scala.swing.SwingApplication
 
+import com.ftl.logview.gui.LogViewMainFrame
+
 /*
  * Here comes the sun... so this is the main object to start the app
  * 
@@ -31,11 +33,10 @@ object LogViewApp extends SwingApplication {
     }
 
     // create first log viewer
-    val firstLogTab = new LogViewBundle(fLog, fProperties)
+    val firstLogTab = new LogViewBundle(fLog, Some(fProperties))
 
     // view
     LogViewMainFrame.pack()
-    LogViewMainFrame.centerOnScreen()
     LogViewMainFrame.visible=true
   }
 
