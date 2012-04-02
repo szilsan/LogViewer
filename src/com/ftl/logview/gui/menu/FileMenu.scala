@@ -64,7 +64,7 @@ object FileMenu extends Menu("File") {
   contents += new MenuItem("Close all tab") {
     reactions += {
       case ButtonClicked(b) => {
-        LogViewMainFrame.tabAndBundle.empty
+        LogViewMainFrame.tabAndBundle = LogViewMainFrame.tabAndBundle.empty
         LogViewMainFrame.tabbedPane.pages.remove(0, LogViewMainFrame.tabbedPane.pages.length)
       }
     }
