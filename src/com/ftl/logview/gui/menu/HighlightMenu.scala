@@ -1,11 +1,13 @@
 package com.ftl.logview.gui.menu
+import scala.annotation.implicitNotFound
 import scala.swing.event.ButtonClicked
 import scala.swing.Dialog
 import scala.swing.Menu
 import scala.swing.MenuItem
+
+import com.ftl.logview.gui.HighlightExpListDialog
 import com.ftl.logview.gui.LogViewMainFrame
-import com.ftl.logview.gui.StyleInputPanel
-import com.ftl.logview.LogViewBundle
+import com.ftl.logview.gui.SkippedExpListDialog
 import com.ftl.logview.LogViewBundle
 
 object HighlightMenu extends Menu("HighLight") {
@@ -16,7 +18,7 @@ object HighlightMenu extends Menu("HighLight") {
           (bundle: LogViewBundle) =>
             {
               require(bundle != null)
-              new StyleInputPanel(bundle)
+              new HighlightExpListDialog(bundle)
             })
     }
   }
@@ -24,21 +26,13 @@ object HighlightMenu extends Menu("HighLight") {
   contents += new MenuItem("Skiped expressions") {
     reactions += {
       case ButtonClicked(b) => {
-        doOnMenuSelect(doOnSkipExpression)
+        doOnMenuSelect(
+          (bundle: LogViewBundle) =>
+            {
+              require(bundle != null)
+              new SkippedExpListDialog(bundle)
+            })
       }
-    }
-  }
-
-  private def doOnSkipExpression(bundle: LogViewBundle) {
-
-    require(bundle != null)
-
-    val skipExpression = Dialog.showInput[String](null, "Skip text expression", "Skipped text", Dialog.Message.Question, null, Seq.empty, null)
-    skipExpression match {
-      case None => None
-      case Some(exp) =>
-        bundle.skippedList += exp
-        bundle.logViewFrame.reloadData
     }
   }
 

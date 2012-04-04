@@ -56,8 +56,8 @@ class LogViewBundle(lf: File, pf: Option[File]) {
           var bg: Color = new Color(Integer.parseInt(parameters(1).trim(), 16))
           var exp = parameters(2).trim()
 
-          StyleUtil.addStyle(sc, name, fg, bg)
-          styles += (name -> exp)
+          StyleUtil.addStyle(sc, exp, fg, bg)
+          styles += (exp -> exp)
         }
       }
     } catch {
