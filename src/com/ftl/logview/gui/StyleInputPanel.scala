@@ -11,28 +11,33 @@ import scala.swing.TextField
 import com.ftl.logview.LogViewBundle
 import javax.swing.JColorChooser
 import com.ftl.logview.logic.StyleUtil
+import javax.swing.text.StyleConstants
 
 /**
  * Style input panel - get style expression and Color
  */
-class StyleInputPanel(bundle: LogViewBundle) extends Dialog {
+class StyleInputPanel(bundle: LogViewBundle, initialExp: String = "") extends Dialog {
   preferredSize = new Dimension(650, 140)
   modal = true
 
   title = "Style input"
 
   // expression definition
-  var expression = new TextField(50)
+  var expression = new TextField(initialExp, 50)
 
   // color choosers
   var expColorBg = Color.WHITE
   var expColorFg = Color.BLACK
+  
+  if (!initialExp.isEmpty()) {
+    expColorBg = bundle.sc.getStyle(initialExp).getAttribute(StyleConstants.Background).asInstanceOf[Color]
+    expColorFg = bundle.sc.getStyle(initialExp).getAttribute(StyleConstants.Foreground).asInstanceOf[Color]
+  }
 
   var sampleText = new Label("Sample text")
   sampleText.foreground = expColorFg
   sampleText.background = expColorBg
   sampleText.opaque = true
-  
 
   var colorBtnBg = new Button(" Background color ") {
     reactions += {
@@ -54,9 +59,12 @@ class StyleInputPanel(bundle: LogViewBundle) extends Dialog {
   var okBtn: Button = new Button("OK") {
     reactions += {
       case ButtonClicked(b) =>
+        // remove old
+        bundle.styles -= initialExp
+
+        // add as new
         StyleUtil.addStyle(bundle.sc, expression.text, expColorFg, expColorBg)
         bundle.styles += (expression.text -> expression.text)
-        bundle.logViewFrame.reloadData
         StyleInputPanel.this.close()
     }
   }

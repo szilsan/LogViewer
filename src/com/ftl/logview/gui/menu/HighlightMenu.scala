@@ -11,27 +11,27 @@ import com.ftl.logview.gui.StyleInputPanel
 import com.ftl.logview.LogViewBundle
 
 object HighlightMenu extends Menu("HighLight") {
-  contents += new MenuItem("Highlighted expressions") {
+  val highlightedMenuText = "Highlighted expressions"
+  contents += new MenuItem(highlightedMenuText) {
     reactions += {
       case ButtonClicked(b) =>
         doOnMenuSelect(
-          (bundle: LogViewBundle) =>
-            {
-              require(bundle != null)
-              new ExpListDialog(bundle, highlightList, {(bundle:LogViewBundle) => new StyleInputPanel(bundle)})
-            })
+          (bundle: LogViewBundle) => {
+            require(bundle != null)
+            new ExpListDialog(highlightedMenuText, bundle, highlightList, doOnAddHighlightExpression, doOnDeleteHighlightExpression, doOnEditHighlightExpression)
+          })
     }
   }
 
-  contents += new MenuItem("Skiped expressions") {
+  val skippedMenuText = "Skiped expressions"
+  contents += new MenuItem(skippedMenuText) {
     reactions += {
       case ButtonClicked(b) => {
         doOnMenuSelect(
-          (bundle: LogViewBundle) =>
-            {
-              require(bundle != null)
-              new ExpListDialog(bundle, skippedList, doOnSkipExpression)
-            })
+          (bundle: LogViewBundle) => {
+            require(bundle != null)
+            new ExpListDialog(skippedMenuText, bundle, skippedList, doOnAddSkipExpression, doOnDeleteSkipExpression, doOnEditSkipExpression)
+          })
       }
     }
   }
@@ -50,12 +50,11 @@ object HighlightMenu extends Menu("HighLight") {
   }
 
   //Skipped expressions handling
-  private def skippedList(bundle: LogViewBundle):Seq[String] =  {
-    for(skipped <- bundle.skippedList) yield skipped
+  private def skippedList(bundle: LogViewBundle): Seq[String] = {
+    for (skipped <- bundle.skippedList) yield skipped
   }
 
-  private def doOnSkipExpression(bundle: LogViewBundle) {
-
+  private def doOnAddSkipExpression(bundle: LogViewBundle) {
     require(bundle != null)
 
     val skipExpression = Dialog.showInput[String](null, "Skip text expression", "Skipped text", Dialog.Message.Question, null, Seq.empty, null)
@@ -66,9 +65,43 @@ object HighlightMenu extends Menu("HighLight") {
         bundle.logViewFrame.reloadData
     }
   }
-  
+
+  private def doOnEditSkipExpression(bundle: LogViewBundle, expression: String) {
+    require(bundle != null && expression!=null)
+
+    val skipExpression = Dialog.showInput[String](null, "Skip text expression", "Skipped text", Dialog.Message.Question, null, Seq.empty, expression)
+    skipExpression match {
+      case None => None
+      case Some(exp) =>
+        bundle.skippedList -= expression
+        bundle.skippedList += exp
+        bundle.logViewFrame.reloadData
+    }
+  }
+
+  private def doOnDeleteSkipExpression(bundle: LogViewBundle, expression: String) {
+    bundle.skippedList -= expression
+    bundle.logViewFrame.reloadData
+  }
+
   // Styles
-  private def highlightList( bundle: LogViewBundle):Seq[String] =  {
+  private def highlightList(bundle: LogViewBundle): Seq[String] = {
     (for (style <- bundle.styles.keySet) yield style).toSeq
   }
+
+  private def doOnAddHighlightExpression(bundle: LogViewBundle) {
+    new StyleInputPanel(bundle)
+    bundle.logViewFrame.reloadData
+  }
+
+  private def doOnEditHighlightExpression(bundle: LogViewBundle, expression: String = "") {
+    new StyleInputPanel(bundle, expression)
+    bundle.logViewFrame.reloadData
+  }
+
+  private def doOnDeleteHighlightExpression(bundle: LogViewBundle, expression: String) {
+    bundle.styles -= expression
+    bundle.logViewFrame.reloadData
+  }
+
 }
