@@ -1,14 +1,20 @@
 package com.ftl.logview.gui
 import java.awt.Dimension
-
+import scala.annotation.implicitNotFound
 import scala.swing.event.ButtonClicked
 import scala.swing.BorderPanel
 import scala.swing.Button
 import scala.swing.Dialog
 import scala.swing.FlowPanel
+import scala.swing.Label
 import scala.swing.ListView
-
 import com.ftl.logview.LogViewBundle
+import javax.swing.ListCellRenderer
+import scala.swing.Component
+import javax.swing.JLabel
+import java.awt.Color
+import javax.swing.text.StyleConstants
+import javax.swing.plaf.basic.BasicBorders
 
 /**
  * Show skipped expressions.
@@ -16,7 +22,7 @@ import com.ftl.logview.LogViewBundle
  *
  */
 class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
-  refresh: LogViewBundle => Seq[String],
+  refresh: LogViewBundle => Seq[Label],
   doOnNewExpression: LogViewBundle => Unit,
   doOnDeleteExpression: (LogViewBundle, String) => Unit,
   doOnEdit: (LogViewBundle, String) => Unit) extends Dialog {
@@ -27,8 +33,35 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
   preferredSize = new Dimension(260, 300)
   title = dialogTitle
 
-  var expList = new ListView[String]
-  expList.selection.intervalMode = ListView.IntervalMode.Single
+  var expList = new ListView[Label] {
+    selection.intervalMode = ListView.IntervalMode.Single
+
+    class myRenderer extends ListView.Renderer[Label] {
+      override def componentFor(list: ListView[_], isSelected: Boolean, focused: Boolean, a: Label, index: Int): Component = {
+        val style = bundle.sc.getStyle(a.text)
+        if (isSelected) {
+          if (style != null) {
+            a.foreground = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Background).asInstanceOf[Color]
+            a.background = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Foreground).asInstanceOf[Color]
+          } else {
+            a.background = Color.BLUE
+            a.foreground = Color.WHITE
+          }
+        } else {
+          if (style != null) {
+            a.background = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Background).asInstanceOf[Color]
+            a.foreground = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Foreground).asInstanceOf[Color]
+          } else {
+            a.background = Color.WHITE
+            a.foreground = Color.BLACK
+          }
+        }
+        a
+      }
+    }
+
+    renderer = new myRenderer
+  }
   refreshData(refresh(bundle))
 
   val btnOk = new Button("Ok") {
@@ -39,7 +72,7 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
     }
   }
 
-  var btnAdd = new Button("Add") {
+  val btnAdd = new Button("Add") {
     reactions += {
       case ButtonClicked(b) => {
         doOnNewExpression(bundle)
@@ -48,7 +81,7 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
     }
   }
 
-  var btnDel = new Button("Delete") {
+  val btnDel = new Button("Delete") {
     reactions += {
       case ButtonClicked(b) => {
         doOnButtonClicked(doOnDeleteExpression)
@@ -56,7 +89,7 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
     }
   }
 
-  var btnEdit = new Button("Edit") {
+  val btnEdit = new Button("Edit") {
     reactions += {
       case ButtonClicked(b) => {
         doOnButtonClicked(doOnEdit)
@@ -65,26 +98,27 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
   }
 
   contents = new BorderPanel {
-    add(expList, BorderPanel.Position.Center)
-    add(new FlowPanel() {
+    layout(expList) = BorderPanel.Position.Center
+
+    layout(new FlowPanel() {
       contents += btnAdd
       contents += btnEdit
       contents += btnDel
       contents += btnOk
-    }, BorderPanel.Position.South)
+    }) = BorderPanel.Position.South
   }
 
   visible = true
 
-  def refreshData(data: Seq[String]) {
+  def refreshData(data: Seq[Label]) {
     expList.listData = data
   }
 
   def doOnButtonClicked(action: (LogViewBundle, String) => Unit) {
     if (expList.selection.items.isEmpty) {
-    	Dialog.showMessage(null, "No expressions is selected","Warning", Dialog.Message.Warning)
+      Dialog.showMessage(null, "No expressions is selected", "Warning", Dialog.Message.Warning)
     } else {
-      action(bundle, expList.selection.items.first)
+      action(bundle, expList.selection.items.first.text)
       refreshData(refresh(bundle))
     }
   }

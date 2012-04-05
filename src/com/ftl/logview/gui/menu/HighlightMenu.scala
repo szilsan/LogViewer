@@ -1,14 +1,17 @@
 package com.ftl.logview.gui.menu
+import java.awt.Color
+import scala.annotation.implicitNotFound
 import scala.swing.event.ButtonClicked
-import scala.swing.ListView
 import scala.swing.Dialog
+import scala.swing.Label
 import scala.swing.Menu
 import scala.swing.MenuItem
-
 import com.ftl.logview.gui.ExpListDialog
 import com.ftl.logview.gui.LogViewMainFrame
 import com.ftl.logview.gui.StyleInputPanel
 import com.ftl.logview.LogViewBundle
+import javax.swing.text.StyleConstants
+import scala.swing.Alignment
 
 object HighlightMenu extends Menu("HighLight") {
   val highlightedMenuText = "Highlighted expressions"
@@ -50,8 +53,8 @@ object HighlightMenu extends Menu("HighLight") {
   }
 
   //Skipped expressions handling
-  private def skippedList(bundle: LogViewBundle): Seq[String] = {
-    for (skipped <- bundle.skippedList) yield skipped
+  private def skippedList(bundle: LogViewBundle): Seq[Label] = {
+    for (skipped <- bundle.skippedList) yield new Label(skipped) {opaque = true; horizontalAlignment = Alignment.Left}
   }
 
   private def doOnAddSkipExpression(bundle: LogViewBundle) {
@@ -67,7 +70,7 @@ object HighlightMenu extends Menu("HighLight") {
   }
 
   private def doOnEditSkipExpression(bundle: LogViewBundle, expression: String) {
-    require(bundle != null && expression!=null)
+    require(bundle != null && expression != null)
 
     val skipExpression = Dialog.showInput[String](null, "Skip text expression", "Skipped text", Dialog.Message.Question, null, Seq.empty, expression)
     skipExpression match {
@@ -85,8 +88,14 @@ object HighlightMenu extends Menu("HighLight") {
   }
 
   // Styles
-  private def highlightList(bundle: LogViewBundle): Seq[String] = {
-    (for (style <- bundle.styles.keySet) yield style).toSeq
+  private def highlightList(bundle: LogViewBundle): Seq[Label] = {
+    (for (style <- bundle.styles.keySet)
+      yield new Label(style) {
+      background = bundle.sc.getStyle(style).getAttribute(StyleConstants.Background).asInstanceOf[Color]
+      foreground = bundle.sc.getStyle(style).getAttribute(StyleConstants.Foreground).asInstanceOf[Color]
+      opaque = true
+      horizontalAlignment = Alignment.Left
+    }).toSeq
   }
 
   private def doOnAddHighlightExpression(bundle: LogViewBundle) {
