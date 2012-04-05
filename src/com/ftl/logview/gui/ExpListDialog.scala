@@ -25,42 +25,22 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
   refresh: LogViewBundle => Seq[Label],
   doOnNewExpression: LogViewBundle => Unit,
   doOnDeleteExpression: (LogViewBundle, String) => Unit,
-  doOnEdit: (LogViewBundle, String) => Unit) extends Dialog {
+  doOnEdit: (LogViewBundle, String) => Unit,
+  listViewRenderer: Option[ListView.Renderer[Label]]) extends Dialog {
 
   require(bundle != null)
 
   modal = true
-  preferredSize = new Dimension(260, 300)
+  preferredSize = new Dimension(280, 300)
   title = dialogTitle
 
   var expList = new ListView[Label] {
     selection.intervalMode = ListView.IntervalMode.Single
 
-    class myRenderer extends ListView.Renderer[Label] {
-      override def componentFor(list: ListView[_], isSelected: Boolean, focused: Boolean, a: Label, index: Int): Component = {
-        val style = bundle.sc.getStyle(a.text)
-        if (isSelected) {
-          if (style != null) {
-            a.foreground = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Background).asInstanceOf[Color]
-            a.background = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Foreground).asInstanceOf[Color]
-          } else {
-            a.background = Color.BLUE
-            a.foreground = Color.WHITE
-          }
-        } else {
-          if (style != null) {
-            a.background = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Background).asInstanceOf[Color]
-            a.foreground = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Foreground).asInstanceOf[Color]
-          } else {
-            a.background = Color.WHITE
-            a.foreground = Color.BLACK
-          }
-        }
-        a
-      }
+    listViewRenderer match {
+      case None => None
+      case Some(r) => renderer = r
     }
-
-    renderer = new myRenderer
   }
   refreshData(refresh(bundle))
 
@@ -108,6 +88,8 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
     }) = BorderPanel.Position.South
   }
 
+  centerOnScreen
+  
   visible = true
 
   def refreshData(data: Seq[Label]) {

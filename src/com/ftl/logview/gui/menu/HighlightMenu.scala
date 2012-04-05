@@ -12,6 +12,8 @@ import com.ftl.logview.gui.StyleInputPanel
 import com.ftl.logview.LogViewBundle
 import javax.swing.text.StyleConstants
 import scala.swing.Alignment
+import scala.swing.ListView
+import scala.swing.Component
 
 object HighlightMenu extends Menu("HighLight") {
   val highlightedMenuText = "Highlighted expressions"
@@ -21,7 +23,10 @@ object HighlightMenu extends Menu("HighLight") {
         doOnMenuSelect(
           (bundle: LogViewBundle) => {
             require(bundle != null)
-            new ExpListDialog(highlightedMenuText, bundle, highlightList, doOnAddHighlightExpression, doOnDeleteHighlightExpression, doOnEditHighlightExpression)
+            new ExpListDialog(highlightedMenuText,
+              bundle, highlightList,
+              doOnAddHighlightExpression, doOnDeleteHighlightExpression, doOnEditHighlightExpression,
+              Option(new StyleListViewRenderer(bundle)))
           })
     }
   }
@@ -33,7 +38,10 @@ object HighlightMenu extends Menu("HighLight") {
         doOnMenuSelect(
           (bundle: LogViewBundle) => {
             require(bundle != null)
-            new ExpListDialog(skippedMenuText, bundle, skippedList, doOnAddSkipExpression, doOnDeleteSkipExpression, doOnEditSkipExpression)
+            new ExpListDialog(skippedMenuText,
+              bundle, skippedList,
+              doOnAddSkipExpression, doOnDeleteSkipExpression, doOnEditSkipExpression,
+              None)
           })
       }
     }
@@ -54,7 +62,7 @@ object HighlightMenu extends Menu("HighLight") {
 
   //Skipped expressions handling
   private def skippedList(bundle: LogViewBundle): Seq[Label] = {
-    for (skipped <- bundle.skippedList) yield new Label(skipped) {opaque = true; horizontalAlignment = Alignment.Left}
+    for (skipped <- bundle.skippedList) yield new Label(skipped) { opaque = true; horizontalAlignment = Alignment.Left }
   }
 
   private def doOnAddSkipExpression(bundle: LogViewBundle) {
@@ -111,6 +119,30 @@ object HighlightMenu extends Menu("HighLight") {
   private def doOnDeleteHighlightExpression(bundle: LogViewBundle, expression: String) {
     bundle.styles -= expression
     bundle.logViewFrame.reloadData
+  }
+
+  class StyleListViewRenderer(bundle: LogViewBundle) extends ListView.Renderer[Label] {
+    override def componentFor(list: ListView[_], isSelected: Boolean, focused: Boolean, a: Label, index: Int): Component = {
+      val style = bundle.sc.getStyle(a.text)
+      if (isSelected) {
+        if (style != null) {
+          a.foreground = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Background).asInstanceOf[Color]
+          a.background = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Foreground).asInstanceOf[Color]
+        } else {
+          a.background = Color.BLUE
+          a.foreground = Color.WHITE
+        }
+      } else {
+        if (style != null) {
+          a.background = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Background).asInstanceOf[Color]
+          a.foreground = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Foreground).asInstanceOf[Color]
+        } else {
+          a.background = Color.WHITE
+          a.foreground = Color.BLACK
+        }
+      }
+      a
+    }
   }
 
 }

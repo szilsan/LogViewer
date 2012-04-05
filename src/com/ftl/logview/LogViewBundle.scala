@@ -30,7 +30,7 @@ class LogViewBundle(lf: File, pf: Option[File]) {
   var skippedList = new ListBuffer[String]
   var styles = Map.empty[String, String]
   if (!propertyFile.isEmpty) {
-    propertiesHandling()
+    propertiesLoading()
   }
 
   // watcher for log file changing
@@ -42,7 +42,7 @@ class LogViewBundle(lf: File, pf: Option[File]) {
   /**
    * Load properties
    */
-  def propertiesHandling() {
+  def propertiesLoading() {
     try {
       for (line <- Source.fromFile(propertyFile.get).getLines()) {
         if (line.startsWith("skip")) {
@@ -68,4 +68,20 @@ class LogViewBundle(lf: File, pf: Option[File]) {
     }
   }
 
+  def propertiesSaving(file: File) {
+    require(file != null)
+
+    try {
+    	for (styleName <- styles.keys) {
+    	  val style = sc.getStyle(styleName)
+
+    	  
+    	}
+    } catch {
+      case ioex: IOException => {
+        Dialog.showMessage(null, "Error: " + ioex.getMessage(), "Error", Dialog.Message.Error)
+        return
+      }
+    }
+  }
 }
