@@ -1,19 +1,10 @@
-// skipped text
-// started text "skipped"
-// =
-// text or regexp
-skipped_1 = Class
-skipped_2 = \d
+[Skipped]
+\d
 
-// styles
-// started text "style"
-// =
-// FG color 
-// ,
-// BG color
-// ,
-// text 
-style_1 = ff0000, 0000ff, DEBUG
-style_2 = ff0000, ff00ff, INFO
-style_3 = ff00ff, 0000ff, [a]
+Class
 
+
+
+
+[Styles]
+000000, ff0000, DEBUG

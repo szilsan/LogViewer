@@ -2,16 +2,19 @@ package com.ftl.logview
 
 import java.awt.Color
 import java.io.File
+import java.io.FileWriter
 import java.io.IOException
+
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
 import scala.swing.Dialog
+
 import com.ftl.logview.gui.LogViewFrame
 import com.ftl.logview.logic.FileChangeWatcher
+
+import javax.swing.text.StyleConstants
 import javax.swing.text.StyleContext
 import logic.StyleUtil
-import java.io.FileWriter
-import javax.swing.text.StyleConstants
 
 /**
  * Contains everything for one log file handling
@@ -71,9 +74,9 @@ class LogViewBundle(lf: File, pf: Option[File]) {
 
   def refreshByProperties(file: File) {
     require(file != null)
-    
+
     propertyFile = Some(file)
-    
+
     propertiesLoading()
     logViewFrame.refreshData
   }
@@ -105,7 +108,7 @@ class LogViewBundle(lf: File, pf: Option[File]) {
       for (styleName <- styles.keys) {
         val style = sc.getStyle(styleName)
         fw.write(style.getAttribute(StyleConstants.Foreground).asInstanceOf[Color].getRGB().toHexString.substring(2) + ", " +
-          style.getAttribute(StyleConstants.Foreground).asInstanceOf[Color].getRGB().toHexString.substring(2) + ", " +
+          style.getAttribute(StyleConstants.Background).asInstanceOf[Color].getRGB().toHexString.substring(2) + ", " +
           styleName + "\n")
       }
       Dialog.showMessage(null, "Property file is saved", "Info", Dialog.Message.Info)
