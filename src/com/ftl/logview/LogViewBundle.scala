@@ -3,16 +3,15 @@ package com.ftl.logview
 import java.awt.Color
 import java.io.File
 import java.io.IOException
-
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
 import scala.swing.Dialog
-
 import com.ftl.logview.gui.LogViewFrame
 import com.ftl.logview.logic.FileChangeWatcher
-
 import javax.swing.text.StyleContext
 import logic.StyleUtil
+import java.io.FileWriter
+import javax.swing.text.StyleConstants
 
 /**
  * Contains everything for one log file handling
@@ -23,7 +22,7 @@ class LogViewBundle(lf: File, pf: Option[File]) {
 
   // files
   def logFile = lf
-  def propertyFile = pf
+  var propertyFile = pf
 
   var sc = new StyleContext
 
@@ -43,21 +42,23 @@ class LogViewBundle(lf: File, pf: Option[File]) {
    * Load properties
    */
   def propertiesLoading() {
+
+    val commentExpression = """^[\[](.)*[\]]$"""
+    val skippedExpression = "(.)*"
+    val styleExpression = "[a-f|A-F|0-0]{6},[ ][a-f|A-F|0-0]{6},[ ](.)*"
+
     try {
       for (line <- Source.fromFile(propertyFile.get).getLines()) {
-        if (line.startsWith("skip")) {
-          skippedList += line.substring(line.indexOf("=") + 1).trim()
-        }
-        if (line.startsWith("style")) {
-          var name = line.substring(0, line.indexOf("="))
-          var parameters = line.substring(line.indexOf("=") + 1).trim().split(",")
 
-          var fg: Color = new Color(Integer.parseInt(parameters(0).trim(), 16))
-          var bg: Color = new Color(Integer.parseInt(parameters(1).trim(), 16))
-          var exp = parameters(2).trim()
-
-          StyleUtil.addStyle(sc, exp, fg, bg)
-          styles += (exp -> exp)
+        commentExpression.r.findFirstMatchIn(line) match {
+          case Some(s) => None
+          case None => styleExpression.r.findFirstIn(line) match {
+            case Some(s) => createStyle(s)
+            case None => skippedExpression.r.findFirstIn(line) match {
+              case None => None
+              case Some(s) => skippedList += s
+            }
+          }
         }
       }
     } catch {
@@ -68,15 +69,47 @@ class LogViewBundle(lf: File, pf: Option[File]) {
     }
   }
 
+  def refreshByProperties(file: File) {
+    require(file != null)
+    
+    propertyFile = Some(file)
+    
+    propertiesLoading()
+    logViewFrame.refreshData
+  }
+
+  private def createStyle(str: String) {
+    val parameters = str.trim().split(",")
+
+    val fg: Color = new Color(Integer.parseInt(parameters(0).trim(), 16))
+    val bg: Color = new Color(Integer.parseInt(parameters(1).trim(), 16))
+    val exp = parameters(2).trim()
+
+    StyleUtil.addStyle(sc, exp, fg, bg)
+    styles += (exp -> exp)
+  }
+
   def propertiesSaving(file: File) {
     require(file != null)
 
-    try {
-    	for (styleName <- styles.keys) {
-    	  val style = sc.getStyle(styleName)
+    propertyFile = new Some(file)
 
-    	  
-    	}
+    try {
+      val fw = new FileWriter(propertyFile.get)
+      // skipped expressions
+      fw.write("[Skipped]\n")
+      skippedList.foreach(s => fw.write(s + "\n"))
+
+      // styles
+      fw.write("\n[Styles]\n")
+      for (styleName <- styles.keys) {
+        val style = sc.getStyle(styleName)
+        fw.write(style.getAttribute(StyleConstants.Foreground).asInstanceOf[Color].getRGB().toHexString.substring(2) + ", " +
+          style.getAttribute(StyleConstants.Foreground).asInstanceOf[Color].getRGB().toHexString.substring(2) + ", " +
+          styleName + "\n")
+      }
+      Dialog.showMessage(null, "Property file is saved", "Info", Dialog.Message.Info)
+      fw.close()
     } catch {
       case ioex: IOException => {
         Dialog.showMessage(null, "Error: " + ioex.getMessage(), "Error", Dialog.Message.Error)

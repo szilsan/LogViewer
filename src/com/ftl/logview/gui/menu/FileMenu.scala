@@ -7,6 +7,8 @@ import com.ftl.logview.LogViewBundle
 import com.ftl.logview.gui.LogViewMainFrame
 import scala.swing.Dialog
 import scala.swing.Separator
+import scala.swing.event.ButtonClicked
+import java.io.File
 
 object FileMenu extends Menu("File") {
   contents += new MenuItem("Open log file") {
@@ -25,7 +27,7 @@ object FileMenu extends Menu("File") {
     tooltip = "Open new log file in a new tab"
   }
 
-  contents += new MenuItem("Open style file") {
+  contents += new MenuItem("Open properties file") {
     reactions += {
       case ButtonClicked(b) => {
         var fc = new FileChooser
@@ -36,12 +38,44 @@ object FileMenu extends Menu("File") {
         if (file != null) {
           val bundle = LogViewMainFrame.tabAndBundle.get(LogViewMainFrame.tabbedPane.selection.page)
           if (bundle.isDefined) {
-            Dialog.showMessage(null, "Not implemented", "Info")
+            bundle.get.refreshByProperties(file)
           }
         }
       }
     }
     tooltip = "Open style file and use on selected tab"
+  }
+
+  contents += new Separator
+
+  contents += new MenuItem("Save properties") {
+    reactions += {
+      case ButtonClicked(b) =>
+        val bundle = LogViewMainFrame.tabAndBundle.get(LogViewMainFrame.tabbedPane.selection.page)
+        if (bundle.isDefined) {
+          bundle.get.propertyFile match {
+            case None =>
+              val file = selectFileToSave()
+              if (file != null) {
+                  bundle.get.propertiesSaving(file)
+              }
+            case Some(s) => bundle.get.propertiesSaving(s)
+          }
+        }
+    }
+  }
+
+  contents += new MenuItem("Save properties as ...") {
+    reactions += {
+      case ButtonClicked(b) =>
+        val file = selectFileToSave()
+        if (file != null) {
+          val bundle = LogViewMainFrame.tabAndBundle.get(LogViewMainFrame.tabbedPane.selection.page)
+          if (bundle.isDefined) {
+            bundle.get.propertiesSaving(file)
+          }
+        }
+    }
   }
 
   contents += new Separator
@@ -81,4 +115,13 @@ object FileMenu extends Menu("File") {
     }
     tooltip = "Exit"
   }
+
+  def selectFileToSave(): File = {
+    var fc = new FileChooser
+    fc.showSaveDialog(this)
+    fc.fileSelectionMode = FileChooser.SelectionMode.FilesOnly
+    fc.multiSelectionEnabled = false
+    fc.selectedFile
+  }
+
 }

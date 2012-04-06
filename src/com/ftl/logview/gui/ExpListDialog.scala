@@ -38,7 +38,7 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
     selection.intervalMode = ListView.IntervalMode.Single
 
     listViewRenderer match {
-      case None => None
+      case None => renderer = ListView.Renderer(_.text)
       case Some(r) => renderer = r
     }
   }
@@ -89,7 +89,7 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
   }
 
   centerOnScreen
-  
+
   visible = true
 
   def refreshData(data: Seq[Label]) {
