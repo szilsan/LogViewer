@@ -14,6 +14,8 @@ import javax.swing.text.StyleConstants
 import scala.swing.Alignment
 import scala.swing.ListView
 import scala.swing.Component
+import javax.swing.border.EmptyBorder
+import javax.swing.border.LineBorder
 
 object HighlightMenu extends Menu("HighLight") {
   val highlightedMenuText = "Highlighted expressions"
@@ -128,6 +130,7 @@ object HighlightMenu extends Menu("HighLight") {
         if (style != null) {
           a.foreground = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Background).asInstanceOf[Color]
           a.background = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Foreground).asInstanceOf[Color]
+          a.horizontalAlignment = Alignment.Right
         } else {
           a.background = Color.BLUE
           a.foreground = Color.WHITE
@@ -136,6 +139,7 @@ object HighlightMenu extends Menu("HighLight") {
         if (style != null) {
           a.background = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Background).asInstanceOf[Color]
           a.foreground = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Foreground).asInstanceOf[Color]
+          a.horizontalAlignment = Alignment.Left
         } else {
           a.background = Color.WHITE
           a.foreground = Color.BLACK

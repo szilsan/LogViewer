@@ -1,5 +1,6 @@
 package com.ftl.logview.gui
 import java.awt.Dimension
+
 import scala.annotation.implicitNotFound
 import scala.swing.event.ButtonClicked
 import scala.swing.BorderPanel
@@ -8,13 +9,8 @@ import scala.swing.Dialog
 import scala.swing.FlowPanel
 import scala.swing.Label
 import scala.swing.ListView
+
 import com.ftl.logview.LogViewBundle
-import javax.swing.ListCellRenderer
-import scala.swing.Component
-import javax.swing.JLabel
-import java.awt.Color
-import javax.swing.text.StyleConstants
-import javax.swing.plaf.basic.BasicBorders
 
 /**
  * Show skipped expressions.

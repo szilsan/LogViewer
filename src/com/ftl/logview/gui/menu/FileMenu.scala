@@ -9,6 +9,7 @@ import scala.swing.Dialog
 import scala.swing.Separator
 import scala.swing.event.ButtonClicked
 import java.io.File
+import javax.swing.JDialog
 
 object FileMenu extends Menu("File") {
   contents += new MenuItem("Open log file") {
@@ -57,9 +58,9 @@ object FileMenu extends Menu("File") {
             case None =>
               val file = selectFileToSave()
               if (file != null) {
-                  bundle.get.propertiesSaving(file)
+                Dialog.showMessage(this, bundle.get.propertiesSaving(file), "Info")
               }
-            case Some(s) => bundle.get.propertiesSaving(s)
+            case Some(s) => Dialog.showMessage(this, bundle.get.propertiesSaving(s), "Info")
           }
         }
     }
@@ -72,7 +73,7 @@ object FileMenu extends Menu("File") {
         if (file != null) {
           val bundle = LogViewMainFrame.tabAndBundle.get(LogViewMainFrame.tabbedPane.selection.page)
           if (bundle.isDefined) {
-            bundle.get.propertiesSaving(file)
+            Dialog.showMessage(this, bundle.get.propertiesSaving(file), "Info")
           }
         }
     }

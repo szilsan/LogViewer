@@ -31,6 +31,7 @@ class LogViewBundle(lf: File, pf: Option[File]) {
 
   var skippedList = new ListBuffer[String]
   var styles = Map.empty[String, String]
+
   if (!propertyFile.isEmpty) {
     propertiesLoading()
   }
@@ -42,13 +43,13 @@ class LogViewBundle(lf: File, pf: Option[File]) {
   val logViewFrame = new LogViewFrame(this)
 
   /**
-   * Load properties
+   * Load properties. No refresh
    */
   def propertiesLoading() {
 
     val commentExpression = """^[\[](.)*[\]]$"""
-    val skippedExpression = "(.)*"
-    val styleExpression = "[a-f|A-F|0-0]{6},[ ][a-f|A-F|0-0]{6},[ ](.)*"
+    val skippedExpression = "(.)+"
+    val styleExpression = "[a-f|A-F|0-9]{6},[ ][a-f|A-F|0-9]{6},[ ](.)*"
 
     try {
       for (line <- Source.fromFile(propertyFile.get).getLines()) {
@@ -72,6 +73,9 @@ class LogViewBundle(lf: File, pf: Option[File]) {
     }
   }
 
+  /**
+   * Reload properties and refresh the view
+   */
   def refreshByProperties(file: File) {
     require(file != null)
 
@@ -81,6 +85,9 @@ class LogViewBundle(lf: File, pf: Option[File]) {
     logViewFrame.refreshData
   }
 
+  /**
+   * Create a style from the specified string
+   */
   private def createStyle(str: String) {
     val parameters = str.trim().split(",")
 
@@ -92,13 +99,17 @@ class LogViewBundle(lf: File, pf: Option[File]) {
     styles += (exp -> exp)
   }
 
-  def propertiesSaving(file: File) {
+  /**
+   * Save properties into the given file
+   */
+  def propertiesSaving(file: File): String = {
     require(file != null)
 
     propertyFile = new Some(file)
+    var message = ""
 
+    val fw = new FileWriter(propertyFile.get)
     try {
-      val fw = new FileWriter(propertyFile.get)
       // skipped expressions
       fw.write("[Skipped]\n")
       skippedList.foreach(s => fw.write(s + "\n"))
@@ -111,13 +122,14 @@ class LogViewBundle(lf: File, pf: Option[File]) {
           style.getAttribute(StyleConstants.Background).asInstanceOf[Color].getRGB().toHexString.substring(2) + ", " +
           styleName + "\n")
       }
-      Dialog.showMessage(null, "Property file is saved", "Info", Dialog.Message.Info)
-      fw.close()
+      message = "Property file is saved"
     } catch {
       case ioex: IOException => {
-        Dialog.showMessage(null, "Error: " + ioex.getMessage(), "Error", Dialog.Message.Error)
-        return
+        message = "Error:" + ioex.getMessage()
       }
+    } finally {
+      fw.close()
     }
+    message
   }
 }
