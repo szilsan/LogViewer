@@ -1,18 +1,28 @@
 package com.ftl.logview.gui.menu
+import java.awt.event.KeyEvent
+import java.io.File
+
+import scala.swing.event.ButtonClicked
+import scala.swing.event.Key
+import scala.swing.Action
+import scala.swing.Dialog
+import scala.swing.FileChooser
 import scala.swing.Menu
 import scala.swing.MenuItem
-import scala.swing.event.ButtonClicked
-import scala.swing.FileChooser
-import com.ftl.logview.LogViewBundle
-import com.ftl.logview.gui.LogViewMainFrame
-import scala.swing.Dialog
 import scala.swing.Separator
-import scala.swing.event.ButtonClicked
-import java.io.File
-import javax.swing.JDialog
+
+import com.ftl.logview.gui.LogViewMainFrame
+import com.ftl.logview.gui.Shortcuts
+import com.ftl.logview.LogViewBundle
 
 object FileMenu extends Menu("File") {
-  contents += new MenuItem("Open log file") {
+  mnemonic = Key.F
+
+  contents += new MenuItem(new Action("Open log file") {
+    mnemonic = KeyEvent.VK_O
+    accelerator = Shortcuts.fileOpenMenuItem
+    def apply() {}
+  }) {
     reactions += {
       case ButtonClicked(b) => {
         var fc = new FileChooser
@@ -28,7 +38,11 @@ object FileMenu extends Menu("File") {
     tooltip = "Open new log file in a new tab"
   }
 
-  contents += new MenuItem("Open properties file") {
+  contents += new MenuItem(new Action("Open properties file") {
+    mnemonic = KeyEvent.VK_P
+    accelerator = Shortcuts.propertyLoadMenuItem
+    def apply() {}
+  }) {
     reactions += {
       case ButtonClicked(b) => {
         var fc = new FileChooser
@@ -49,7 +63,11 @@ object FileMenu extends Menu("File") {
 
   contents += new Separator
 
-  contents += new MenuItem("Save properties") {
+  contents += new MenuItem(new Action("Save properties") {
+    mnemonic = KeyEvent.VK_S
+    accelerator = Shortcuts.propertySaveMenuItem
+    def apply() {}
+  }) {
     reactions += {
       case ButtonClicked(b) =>
         val bundle = LogViewMainFrame.tabAndBundle.get(LogViewMainFrame.tabbedPane.selection.page)
@@ -67,6 +85,7 @@ object FileMenu extends Menu("File") {
   }
 
   contents += new MenuItem("Save properties as ...") {
+    mnemonic = Key.A
     reactions += {
       case ButtonClicked(b) =>
         val file = selectFileToSave()
@@ -81,7 +100,11 @@ object FileMenu extends Menu("File") {
 
   contents += new Separator
 
-  contents += new MenuItem("Close tab") {
+  contents += new MenuItem(new Action("Close tab") {
+    mnemonic = KeyEvent.VK_C
+    accelerator = Shortcuts.tabCLoseMenuItem
+    def apply() {}
+  }) {
     reactions += {
       case ButtonClicked(b) => {
         if (LogViewMainFrame.tabAndBundle.nonEmpty) {
@@ -96,7 +119,11 @@ object FileMenu extends Menu("File") {
     tooltip = "Close selected tab"
   }
 
-  contents += new MenuItem("Close all tab") {
+  contents += new MenuItem(new Action("Close all tab") {
+    mnemonic = KeyEvent.VK_C
+    accelerator = Shortcuts.allTabCLoseMenuItem
+    def apply() {}
+  }) {
     reactions += {
       case ButtonClicked(b) => {
         LogViewMainFrame.tabAndBundle = LogViewMainFrame.tabAndBundle.empty
@@ -108,7 +135,11 @@ object FileMenu extends Menu("File") {
 
   contents += new Separator
 
-  contents += new MenuItem("Exit") {
+  contents += new MenuItem(new Action("Exit") {
+    mnemonic = KeyEvent.VK_X
+    accelerator = Shortcuts.exitMenuItem
+    def apply() {}
+  }) {
     reactions += {
       case ButtonClicked(b) => {
         exit(0)

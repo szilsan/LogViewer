@@ -16,10 +16,23 @@ import scala.swing.ListView
 import scala.swing.Component
 import javax.swing.border.EmptyBorder
 import javax.swing.border.LineBorder
+import scala.swing.Action
+import java.awt.event.KeyEvent
+import javax.swing.KeyStroke
+import java.awt.event.InputEvent
+import com.ftl.logview.gui.Shortcuts
+import scala.swing.event.Key
 
-object HighlightMenu extends Menu("HighLight") {
+object HighlightMenu extends Menu("Highlight") {
+  
+  mnemonic = Key.L
+  
   val highlightedMenuText = "Highlighted expressions"
-  contents += new MenuItem(highlightedMenuText) {
+   val highlightMenuItem = new MenuItem(new Action(highlightedMenuText) {
+    mnemonic = KeyEvent.VK_H
+    accelerator = Shortcuts.highlightListMenuItem
+    def apply() {}
+  }) {
     reactions += {
       case ButtonClicked(b) =>
         doOnMenuSelect(
@@ -32,9 +45,14 @@ object HighlightMenu extends Menu("HighLight") {
           })
     }
   }
+  contents += highlightMenuItem
 
   val skippedMenuText = "Skiped expressions"
-  contents += new MenuItem(skippedMenuText) {
+  contents += new MenuItem(new Action(skippedMenuText) {
+    mnemonic = KeyEvent.VK_K
+    accelerator = Some(KeyStroke.getKeyStroke(KeyEvent.VK_K, InputEvent.CTRL_DOWN_MASK))
+    def apply() {}
+  }) {
     reactions += {
       case ButtonClicked(b) => {
         doOnMenuSelect(
