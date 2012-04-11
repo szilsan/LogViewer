@@ -36,4 +36,23 @@ object Shortcuts {
   def helpMenuItem = Some(loadedHelpMenuItem.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_F1, InputEvent.CTRL_DOWN_MASK)))
   def aboutMenuItem = Some(loadedAboutMenuItem.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK)))
 
+  def setShortcut(shortcutType: String, shortcut: KeyStroke) {
+    require(shortcut != null)
+
+    val st = ShortcutType.values.find(_.toString == shortcutType)
+    st match {
+      case None => None
+      case Some(s) =>
+        s match {
+          case ShortcutType.LOG_FILE_OPEN => loadedFileOpenMenuItem = Some(shortcut)
+        }
+    }
+
+  }
+
+  object ShortcutType extends Enumeration {
+    val LOG_FILE_OPEN, PROPERTY_FILE_OPEN = Value
+
+  }
+
 }

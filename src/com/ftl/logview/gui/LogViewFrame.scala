@@ -2,8 +2,8 @@ package com.ftl.logview.gui
 
 import scala.swing.BorderPanel
 import scala.swing.TabbedPane
-
 import com.ftl.logview.LogViewBundle
+import scala.swing.event.WindowClosing
 
 class LogViewFrame(viewBundle: LogViewBundle) extends BorderPanel {
 
@@ -21,6 +21,14 @@ class LogViewFrame(viewBundle: LogViewBundle) extends BorderPanel {
   
   // init data
   refreshData
+  
+  listenTo(this)
+  reactions += {
+    case WindowClosing(e) => {
+      println("Exiting...")
+      System.exit(0)
+    }
+  }
 
   // refresh [tail] log data
   def refreshData = {

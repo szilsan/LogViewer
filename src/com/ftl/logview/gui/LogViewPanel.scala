@@ -2,21 +2,20 @@ package com.ftl.logview.gui
 
 import java.io.IOException
 import java.io.RandomAccessFile
-
-import scala.swing.event.WindowClosing
 import scala.swing.BorderPanel
 import scala.swing.Component
 import scala.swing.Dialog
 import scala.swing.ScrollPane
 import scala.swing.Swing
-
 import com.ftl.logview.logic.DocumentUtil
 import com.ftl.logview.logic.TextUtil
 import com.ftl.logview.LogViewBundle
-
 import javax.swing.text.DefaultStyledDocument
 import javax.swing.JEditorPane
 import javax.swing.JTextPane
+import javax.swing.AbstractAction
+import javax.swing.KeyStroke
+import com.ftl.logview.gui.action.FindAndHighlightAction
 
 class LogViewPanel(bundle: LogViewBundle) extends BorderPanel {
 
@@ -27,15 +26,11 @@ class LogViewPanel(bundle: LogViewBundle) extends BorderPanel {
   var doc: DefaultStyledDocument = new DefaultStyledDocument(bundle.sc);
   val editorPane: JTextPane = createTextPane
 
-  listenTo(this)
-  reactions += {
-    case WindowClosing(e) => {
-      println("Exiting...")
-      System.exit(0)
-    }
-  }
   createGui
   reloadData
+  
+  // find
+  addKeyBinding("control F", new FindAndHighlightAction(editorPane))
   
   def reloadData {
     filePosition = 0
@@ -67,6 +62,14 @@ class LogViewPanel(bundle: LogViewBundle) extends BorderPanel {
     editorPane.setText(TextUtil.deleteSkippedTexts(editorPane.getText(), bundle.skippedList.toList))
     DocumentUtil.highlightText(doc, bundle.sc, bundle.styles, editorPane.getText())
   }
+  
+  // http://tips4java.wordpress.com/2008/10/10/key-bindings/	
+  def addKeyBinding(keyBinding:String, action: AbstractAction) {
+	  val keyStroke = KeyStroke.getKeyStroke(keyBinding);
+	  editorPane.getInputMap().put(keyStroke, keyBinding);
+	  editorPane.getActionMap().put(keyBinding, action);
+  }
+  
 
   // GUI
   private def createGui {
