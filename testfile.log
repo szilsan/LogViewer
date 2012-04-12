@@ -9,6 +9,127 @@ getProperties():        {imqDestinationName=EquationQ, imqDestinationDescription
 10:20:20.714 INFO  c.k.n.e.c.cache.MessageCorrelationCache [__ejb-thread-pool4] - registering outbound message id ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712 for response message type LBATV0
 10:20:20.716 DEBUG com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - Message string: S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|
 10:20:20.716 INFO  com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - received EQ message 'LBATK0' with id: 'ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712'
+10:20:20.712 INFO  c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sending message 'S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|' to queue Oracle GlassFish(tm) Server MQ Destination
+getName():              EquationQ
+Class:                  com.sun.messaging.Queue
+getVERSION():           3.0
+isReadonly():           false
+getProperties():        {imqDestinationName=EquationQ, imqDestinationDescription=A Description for the Destination Object}
+10:20:20.712 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - #### after send ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.713 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sent JMS message with id ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0 - ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.714 INFO  c.k.n.e.c.cache.MessageCorrelationCache [__ejb-thread-pool4] - registering outbound message id ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712 for response message type LBATV0
+10:20:20.716 DEBUG com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - Message string: S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|
+10:20:20.716 INFO  com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - received EQ message 'LBATK0' with id: 'ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712'
+10:20:20.712 INFO  c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sending message 'S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|' to queue Oracle GlassFish(tm) Server MQ Destination
+getName():              EquationQ
+Class:                  com.sun.messaging.Queue
+getVERSION():           3.0
+isReadonly():           false
+getProperties():        {imqDestinationName=EquationQ, imqDestinationDescription=A Description for the Destination Object}
+10:20:20.712 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - #### after send ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.713 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sent JMS message with id ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0 - ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.714 INFO  c.k.n.e.c.cache.MessageCorrelationCache [__ejb-thread-pool4] - registering outbound message id ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712 for response message type LBATV0
+10:20:20.716 DEBUG com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - Message string: S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|
+10:20:20.716 INFO  com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - received EQ message 'LBATK0' with id: 'ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712'
+10:20:20.712 INFO  c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sending message 'S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|' to queue Oracle GlassFish(tm) Server MQ Destination
+getName():              EquationQ
+Class:                  com.sun.messaging.Queue
+getVERSION():           3.0
+isReadonly():           false
+getProperties():        {imqDestinationName=EquationQ, imqDestinationDescription=A Description for the Destination Object}
+10:20:20.712 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - #### after send ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.713 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sent JMS message with id ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0 - ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.714 INFO  c.k.n.e.c.cache.MessageCorrelationCache [__ejb-thread-pool4] - registering outbound message id ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712 for response message type LBATV0
+10:20:20.716 DEBUG com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - Message string: S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|
+10:20:20.716 INFO  com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - received EQ message 'LBATK0' with id: 'ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712'
+10:20:20.712 INFO  c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sending message 'S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|' to queue Oracle GlassFish(tm) Server MQ Destination
+getName():              EquationQ
+Class:                  com.sun.messaging.Queue
+getVERSION():           3.0
+isReadonly():           false
+getProperties():        {imqDestinationName=EquationQ, imqDestinationDescription=A Description for the Destination Object}
+10:20:20.712 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - #### after send ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.713 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sent JMS message with id ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0 - ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.714 INFO  c.k.n.e.c.cache.MessageCorrelationCache [__ejb-thread-pool4] - registering outbound message id ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712 for response message type LBATV0
+10:20:20.716 DEBUG com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - Message string: S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|
+10:20:20.716 INFO  com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - received EQ message 'LBATK0' with id: 'ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712'
+10:20:20.712 INFO  c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sending message 'S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|' to queue Oracle GlassFish(tm) Server MQ Destination
+getName():              EquationQ
+Class:                  com.sun.messaging.Queue
+getVERSION():           3.0
+isReadonly():           false
+getProperties():        {imqDestinationName=EquationQ, imqDestinationDescription=A Description for the Destination Object}
+10:20:20.712 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - #### after send ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.713 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sent JMS message with id ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0 - ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.714 INFO  c.k.n.e.c.cache.MessageCorrelationCache [__ejb-thread-pool4] - registering outbound message id ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712 for response message type LBATV0
+10:20:20.716 DEBUG com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - Message string: S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|
+10:20:20.716 INFO  com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - received EQ message 'LBATK0' with id: 'ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712'
+10:20:20.712 INFO  c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sending message 'S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|' to queue Oracle GlassFish(tm) Server MQ Destination
+getName():              EquationQ
+Class:                  com.sun.messaging.Queue
+getVERSION():           3.0
+isReadonly():           false
+getProperties():        {imqDestinationName=EquationQ, imqDestinationDescription=A Description for the Destination Object}
+10:20:20.712 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - #### after send ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.713 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sent JMS message with id ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0 - ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.714 INFO  c.k.n.e.c.cache.MessageCorrelationCache [__ejb-thread-pool4] - registering outbound message id ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712 for response message type LBATV0
+10:20:20.716 DEBUG com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - Message string: S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|
+10:20:20.716 INFO  com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - received EQ message 'LBATK0' with id: 'ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712'
+10:20:20.712 INFO  c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sending message 'S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|' to queue Oracle GlassFish(tm) Server MQ Destination
+getName():              EquationQ
+Class:                  com.sun.messaging.Queue
+getVERSION():           3.0
+isReadonly():           false
+getProperties():        {imqDestinationName=EquationQ, imqDestinationDescription=A Description for the Destination Object}
+10:20:20.712 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - #### after send ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.713 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sent JMS message with id ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0 - ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.714 INFO  c.k.n.e.c.cache.MessageCorrelationCache [__ejb-thread-pool4] - registering outbound message id ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712 for response message type LBATV0
+10:20:20.716 DEBUG com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - Message string: S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|
+10:20:20.716 INFO  com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - received EQ message 'LBATK0' with id: 'ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712'
+10:20:20.712 INFO  c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sending message 'S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|' to queue Oracle GlassFish(tm) Server MQ Destination
+getName():              EquationQ
+Class:                  com.sun.messaging.Queue
+getVERSION():           3.0
+isReadonly():           false
+getProperties():        {imqDestinationName=EquationQ, imqDestinationDescription=A Description for the Destination Object}
+10:20:20.712 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - #### after send ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.713 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sent JMS message with id ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0 - ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.714 INFO  c.k.n.e.c.cache.MessageCorrelationCache [__ejb-thread-pool4] - registering outbound message id ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712 for response message type LBATV0
+10:20:20.716 DEBUG com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - Message string: S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|
+10:20:20.716 INFO  com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - received EQ message 'LBATK0' with id: 'ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712'
+10:20:20.712 INFO  c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sending message 'S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|' to queue Oracle GlassFish(tm) Server MQ Destination
+getName():              EquationQ
+Class:                  com.sun.messaging.Queue
+getVERSION():           3.0
+isReadonly():           false
+getProperties():        {imqDestinationName=EquationQ, imqDestinationDescription=A Description for the Destination Object}
+10:20:20.712 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - #### after send ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.713 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sent JMS message with id ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0 - ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.714 INFO  c.k.n.e.c.cache.MessageCorrelationCache [__ejb-thread-pool4] - registering outbound message id ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712 for response message type LBATV0
+10:20:20.716 DEBUG com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - Message string: S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|
+10:20:20.716 INFO  com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - received EQ message 'LBATK0' with id: 'ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712'
+10:20:20.712 INFO  c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sending message 'S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|' to queue Oracle GlassFish(tm) Server MQ Destination
+getName():              EquationQ
+Class:                  com.sun.messaging.Queue
+getVERSION():           3.0
+isReadonly():           false
+getProperties():        {imqDestinationName=EquationQ, imqDestinationDescription=A Description for the Destination Object}
+10:20:20.712 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - #### after send ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.713 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sent JMS message with id ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0 - ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.714 INFO  c.k.n.e.c.cache.MessageCorrelationCache [__ejb-thread-pool4] - registering outbound message id ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712 for response message type LBATV0
+10:20:20.716 DEBUG com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - Message string: S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|
+10:20:20.716 INFO  com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - received EQ message 'LBATK0' with id: 'ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712'
+10:20:20.712 INFO  c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sending message 'S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|' to queue Oracle GlassFish(tm) Server MQ Destination
+getName():              EquationQ
+Class:                  com.sun.messaging.Queue
+getVERSION():           3.0
+isReadonly():           false
+getProperties():        {imqDestinationName=EquationQ, imqDestinationDescription=A Description for the Destination Object}
+10:20:20.712 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - #### after send ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.713 DEBUG c.k.n.ebank.communication.jms.JmsMessageWriter [__ejb-thread-pool4] - sent JMS message with id ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0 - ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712
+10:20:20.714 INFO  c.k.n.e.c.cache.MessageCorrelationCache [__ejb-thread-pool4] - registering outbound message id ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712 for response message type LBATV0
+10:20:20.716 DEBUG com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - Message string: S|LBATK0    |ID:0-127.0.0.1(a8:2e:cc:26:10:74)-1-0|J42589||0002|J42589|100|HG|
+10:20:20.716 INFO  com.khb.nextgen.legacystub.equation.EquationMDB [p: thread-pool-1; w: 39] - received EQ message 'LBATK0' with id: 'ID:458-127.0.0.1(a8:2e:cc:26:10:74)-1-1332836420712'
 
 
 logback pattern:
