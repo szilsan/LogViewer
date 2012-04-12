@@ -1,9 +1,11 @@
 package com.ftl.logview.gui.action
 import java.awt.event.ActionEvent
+
+import scala.collection.immutable.Seq
+import scala.swing.Dialog
+
 import javax.swing.AbstractAction
 import javax.swing.JEditorPane
-import scala.swing.Dialog
-import scala.collection.immutable.Seq
 
 class FindAndHighlightAction(editorPane: JEditorPane) extends AbstractAction {
 
@@ -11,7 +13,7 @@ class FindAndHighlightAction(editorPane: JEditorPane) extends AbstractAction {
   var lastSearchText = ""
 
   def actionPerformed(actionEvent: ActionEvent) {
-    val textToSearch = Dialog.showInput[String](null, "Text to search", "", Dialog.Message.Question, null, Seq.empty, "")
+    val textToSearch = Dialog.showInput[String](null, "Text to search", "", Dialog.Message.Question, null, Seq.empty, lastSearchText)
     textToSearch match {
       case None => None
       case Some(t) =>
@@ -20,11 +22,17 @@ class FindAndHighlightAction(editorPane: JEditorPane) extends AbstractAction {
           lastPosition = 0
         }
 
-        val pos = editorPane.getDocument.getText(0, editorPane.getDocument().getLength()).indexOf(t, lastPosition)
-        if (pos != -1) {
-          editorPane.setCaretPosition(editorPane.getDocument.getText(0, editorPane.getDocument().getLength()).indexOf(t, lastPosition))
-          lastPosition += (pos - lastPosition + t.length())
-        }
+        findNext()
+    }
+  }
+
+  def findNext() {
+    val pos = editorPane.getDocument.getText(0, editorPane.getDocument().getLength()).indexOf(lastSearchText, lastPosition)
+    if (pos != -1) {
+      editorPane.setCaretPosition(editorPane.getDocument.getText(0, editorPane.getDocument().getLength()).indexOf(lastSearchText, lastPosition))
+      lastPosition += (pos - lastPosition + lastSearchText.length())
+    } else {
+      Dialog.showMessage(null, "Not found: " + lastSearchText, "Info", Dialog.Message.Info)
     }
   }
 }

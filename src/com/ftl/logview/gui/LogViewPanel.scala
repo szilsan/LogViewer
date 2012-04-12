@@ -16,6 +16,7 @@ import javax.swing.JTextPane
 import javax.swing.AbstractAction
 import javax.swing.KeyStroke
 import com.ftl.logview.gui.action.FindAndHighlightAction
+import action.FindNextAction
 
 class LogViewPanel(bundle: LogViewBundle) extends BorderPanel {
 
@@ -28,16 +29,20 @@ class LogViewPanel(bundle: LogViewBundle) extends BorderPanel {
 
   createGui
   reloadData
-  
+
   // find
-  addKeyBinding("control F", new FindAndHighlightAction(editorPane))
-  
+  val findAction = new FindAndHighlightAction(editorPane)
+  addKeyBinding("control F", findAction)
+
+  // refind
+  addKeyBinding("control N", new FindNextAction(findAction))
+
   def reloadData {
     filePosition = 0
     editorPane.setText("")
     refreshData
   }
-  
+
   def refreshData {
     try {
       val raf: RandomAccessFile = new RandomAccessFile(bundle.logFile.getAbsoluteFile(), "r")
@@ -62,14 +67,13 @@ class LogViewPanel(bundle: LogViewBundle) extends BorderPanel {
     editorPane.setText(TextUtil.deleteSkippedTexts(editorPane.getText(), bundle.skippedList.toList))
     DocumentUtil.highlightText(doc, bundle.sc, bundle.styles, editorPane.getText())
   }
-  
+
   // http://tips4java.wordpress.com/2008/10/10/key-bindings/	
-  def addKeyBinding(keyBinding:String, action: AbstractAction) {
-	  val keyStroke = KeyStroke.getKeyStroke(keyBinding);
-	  editorPane.getInputMap().put(keyStroke, keyBinding);
-	  editorPane.getActionMap().put(keyBinding, action);
+  def addKeyBinding(keyBinding: String, action: AbstractAction) {
+    val keyStroke = KeyStroke.getKeyStroke(keyBinding);
+    editorPane.getInputMap().put(keyStroke, keyBinding);
+    editorPane.getActionMap().put(keyBinding, action);
   }
-  
 
   // GUI
   private def createGui {
