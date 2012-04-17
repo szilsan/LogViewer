@@ -50,6 +50,7 @@ class LogViewBundle(lf: File, pf: Option[File]) {
     val commentExpression = """^[\[](.)*[\]]$"""
     val skippedExpression = "(.)+"
     val styleExpression = "[a-f|A-F|0-9]{6},[ ][a-f|A-F|0-9]{6},[ ](.)*"
+    val shortcutExpression = "[A-Z_]*[ ]*=[ ]*(control|alt)[ ]*[A-Z]"
 
     try {
       for (line <- Source.fromFile(propertyFile.get).getLines()) {
@@ -58,9 +59,12 @@ class LogViewBundle(lf: File, pf: Option[File]) {
           case Some(s) => None
           case None => styleExpression.r.findFirstIn(line) match {
             case Some(s) => createStyle(s)
-            case None => skippedExpression.r.findFirstIn(line) match {
-              case None => None
-              case Some(s) => skippedList += s
+            case None => shortcutExpression.r.findFirstIn(line) match {
+              case Some(s) => handleShortcut(s)
+              case None => skippedExpression.r.findFirstIn(line) match {
+                case None => None
+                case Some(s) => skippedList += s
+              }
             }
           }
         }
@@ -85,6 +89,13 @@ class LogViewBundle(lf: File, pf: Option[File]) {
     logViewFrame.refreshData
   }
 
+  /**
+   * Set shortcut
+   */
+  private def handleShortcut(str:String) {
+    println(str)
+  }
+  
   /**
    * Create a style from the specified string
    */

@@ -15,6 +15,9 @@ object Shortcuts {
   var loadedSkippedListMenuItem: Option[KeyStroke] = None
   var loadedHelpMenuItem: Option[KeyStroke] = None
   var loadedAboutMenuItem: Option[KeyStroke] = None
+  
+  var findKeyStroke: Option[KeyStroke] = None
+  var findNextKeyStroke: Option[KeyStroke] = None
 
   // defaults
   // file menu
@@ -29,13 +32,17 @@ object Shortcuts {
   def allTabCLoseMenuItem = Some(loadedAllTabCLoseMenuItem.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK)))
 
   // highlighted menu
-  def highlightListMenuItem = Some(loadedHighlightListMenuItem.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.CTRL_DOWN_MASK)))
+  def highlightListMenuItem = Some(loadedHighlightListMenuItem.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK)))
   def skippedListMenuItem = Some(loadedSkippedListMenuItem.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_K, InputEvent.CTRL_DOWN_MASK)))
 
   // help menu
   def helpMenuItem = Some(loadedHelpMenuItem.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_F1, InputEvent.CTRL_DOWN_MASK)))
   def aboutMenuItem = Some(loadedAboutMenuItem.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK)))
 
+  // shortcuts for panel
+  def findShortCut = Some(loadedAboutMenuItem.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK)))
+  def findNextShortcut = Some(loadedAboutMenuItem.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)))
+  
   def setShortcut(shortcutType: String, shortcut: KeyStroke) {
     require(shortcut != null)
 

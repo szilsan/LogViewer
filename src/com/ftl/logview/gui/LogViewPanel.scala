@@ -32,7 +32,8 @@ class LogViewPanel(bundle: LogViewBundle) extends BorderPanel {
 
   // find
   val findAction = new FindAndHighlightAction(editorPane)
-  addKeyBinding("control F", findAction)
+//  addKeyBinding("control F", findAction)
+  addKeyBinding(Shortcuts.findShortCut.get, findAction)
 
   // refind
   addKeyBinding("control N", new FindNextAction(findAction))
@@ -73,6 +74,16 @@ class LogViewPanel(bundle: LogViewBundle) extends BorderPanel {
     val keyStroke = KeyStroke.getKeyStroke(keyBinding);
     editorPane.getInputMap().put(keyStroke, keyBinding);
     editorPane.getActionMap().put(keyBinding, action);
+  }
+
+  def addKeyBinding(keyStroke: KeyStroke, action: AbstractAction) {
+    editorPane.getInputMap().put(keyStroke, keyStroke.toString);
+    editorPane.getActionMap().put(keyStroke.toString, action);
+  }
+  
+  def removeKeyBinding(keyStroke: KeyStroke) {
+    editorPane.getInputMap().remove(keyStroke)
+    editorPane.getActionMap.remove(keyStroke.toString)
   }
 
   // GUI

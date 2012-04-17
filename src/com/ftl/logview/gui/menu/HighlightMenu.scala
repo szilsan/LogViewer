@@ -29,7 +29,7 @@ object HighlightMenu extends Menu("Highlight") {
   
   val highlightedMenuText = "Highlighted expressions"
    val highlightMenuItem = new MenuItem(new Action(highlightedMenuText) {
-    mnemonic = KeyEvent.VK_H
+    mnemonic = KeyEvent.VK_I
     accelerator = Shortcuts.highlightListMenuItem
     def apply() {}
   }) {
@@ -50,7 +50,7 @@ object HighlightMenu extends Menu("Highlight") {
   val skippedMenuText = "Skiped expressions"
   contents += new MenuItem(new Action(skippedMenuText) {
     mnemonic = KeyEvent.VK_K
-    accelerator = Some(KeyStroke.getKeyStroke(KeyEvent.VK_K, InputEvent.CTRL_DOWN_MASK))
+    accelerator = Shortcuts.skippedListMenuItem
     def apply() {}
   }) {
     reactions += {

@@ -1,4 +1,5 @@
 package com.ftl.logview.gui.menu
+
 import java.awt.event.KeyEvent
 
 import scala.swing.event.ButtonClicked
@@ -20,9 +21,16 @@ object HelpMenu extends Menu("Help") {
     accelerator = Shortcuts.helpMenuItem
     def apply() {}
   }) {
+    val helpMessage = "Shortcuts:\n" +
+      "HOME - Jump to beginning of the line\n" +
+      "END  - Jump to end of the line\n" +
+      "CTRL + HOME - Jump to the beginning of the text\n" +
+      "CTRL + END - Jump to the end of the text\n" +
+      "CTRL + F - Find \n" +
+      "CTRL + N - Find next\n"
     reactions += {
       case ButtonClicked(b) => {
-        Dialog.showMessage(null, "LogViwer", "Help")
+        Dialog.showMessage(null, helpMessage, "Help")
       }
     }
   }
@@ -34,9 +42,10 @@ object HelpMenu extends Menu("Help") {
     accelerator = Shortcuts.aboutMenuItem
     def apply() {}
   }) {
+    val aboutMessage = """LogViewer written in Scala """"
     reactions += {
       case ButtonClicked(b) => {
-        Dialog.showMessage(null, "LogViwer", "About")
+        Dialog.showMessage(null, aboutMessage, "About")
       }
     }
   }

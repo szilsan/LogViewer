@@ -6,3 +6,11 @@ Class
 000000, ff0000, DEBUG
 000000, ffff00, INFO
 000000, 3300ff, com
+
+[Shortcuts]
+FIND = control I
+FIND_NEXT = control O
+ANYTHING = alt K
+
+[Log pattern]
+[pattern = %d{HH:mm:ss.SSS} %-5level %logger{48} [%thread] - %msg%n]

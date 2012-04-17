@@ -22,6 +22,8 @@ class LogViewFrame(viewBundle: LogViewBundle) extends BorderPanel {
   // init data
   refreshData
   
+  logViewPanel.requestFocus
+  
   listenTo(this)
   reactions += {
     case WindowClosing(e) => {
