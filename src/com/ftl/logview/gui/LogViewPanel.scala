@@ -18,6 +18,7 @@ import javax.swing.KeyStroke
 import com.ftl.logview.gui.action.FindAndHighlightAction
 import action.FindNextAction
 import javax.swing.JComponent
+import com.ftl.logview.ShortcutType
 
 class LogViewPanel(bundle: LogViewBundle) extends BorderPanel {
 
@@ -33,11 +34,9 @@ class LogViewPanel(bundle: LogViewBundle) extends BorderPanel {
 
   // find
   val findAction = new FindAndHighlightAction(editorPane)
-  Shortcuts.addKeyBinding(editorPane, Shortcuts.findShortCut, findAction)
 
   // refind
   val refindAction = new FindNextAction(findAction)
-  Shortcuts.addKeyBinding(editorPane, Shortcuts.findNextShortcut, refindAction)
 
   def reloadData {
     filePosition = 0
@@ -68,6 +67,15 @@ class LogViewPanel(bundle: LogViewBundle) extends BorderPanel {
     }
     editorPane.setText(TextUtil.deleteSkippedTexts(editorPane.getText(), bundle.skippedList.toList))
     DocumentUtil.highlightText(doc, bundle.sc, bundle.styles, editorPane.getText())
+    refreshShortcutsOnEditorpane
+  }
+  
+  private def refreshShortcutsOnEditorpane() {
+    Shortcuts.removeKeyBinding(editorPane, ShortcutType.FIND.toString)
+    Shortcuts.removeKeyBinding(editorPane, ShortcutType.FIND_NEXT.toString)
+    
+    Shortcuts.addKeyBinding(editorPane, Shortcuts.findShortCut, findAction, ShortcutType.FIND.toString)
+    Shortcuts.addKeyBinding(editorPane, Shortcuts.findNextShortcut, refindAction,ShortcutType.FIND_NEXT.toString)
   }
 
   // GUI

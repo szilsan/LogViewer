@@ -2,10 +2,10 @@ package com.ftl.logview.gui
 
 import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
-
 import javax.swing.AbstractAction
 import javax.swing.JComponent
 import javax.swing.KeyStroke
+import com.ftl.logview.ShortcutType
 
 object Shortcuts {
 
@@ -61,11 +61,6 @@ object Shortcuts {
 
   }
 
-  object ShortcutType extends Enumeration {
-    val FIND, FIND_NEXT = Value
-
-  }
-
   /**
    * stringToProcess: you get this string from propeorty file (example: FIND = control F)
    */
@@ -92,29 +87,31 @@ object Shortcuts {
   }
 
   // http://tips4java.wordpress.com/2008/10/10/key-bindings/	
-  def addKeyBinding(component: JComponent, keyBinding: String, action: AbstractAction) {
+  def addKeyBinding(component: JComponent, keyBinding: String, action: AbstractAction, name: String) {
     require(component != null && keyBinding != null && action != null)
 
-    val keyStroke = KeyStroke.getKeyStroke(keyBinding);
-    component.getInputMap().put(keyStroke, keyBinding);
-    component.getActionMap().put(keyBinding, action);
+    val keyStroke = KeyStroke.getKeyStroke(keyBinding)
+    component.getInputMap().put(keyStroke, name)
+    component.getActionMap().put(name, action)
   }
 
-  def addKeyBinding(component: JComponent, keyStroke: Option[KeyStroke], action: AbstractAction) {
+  def addKeyBinding(component: JComponent, keyStroke: Option[KeyStroke], action: AbstractAction, name: String) {
     keyStroke match {
       case None => None
       case Some(s) =>
-        component.getInputMap().put(s, s.toString);
-        component.getActionMap().put(s.toString, action);
+        component.getInputMap().put(s, name)
+        component.getActionMap().put(name, action)
     }
   }
 
-  def removeKeyBinding(component: JComponent, keyStroke: Option[KeyStroke]) {
-    keyStroke match {
-      case None => None
-      case Some(s) =>
-        component.getInputMap().remove(s)
-        component.getActionMap.remove(s.toString)
+  def removeKeyBinding(component: JComponent, name: String) {
+    if (component.getInputMap.keys != null) {
+      component.getInputMap().keys.find(component.getInputMap.get(_) == name) match {
+        case None => None
+        case Some(s) =>
+          component.getInputMap.remove(s)
+          component.getActionMap.remove(name)
+      }
     }
   }
 }
