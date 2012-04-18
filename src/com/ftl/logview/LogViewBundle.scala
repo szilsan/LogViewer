@@ -4,17 +4,15 @@ import java.awt.Color
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
-
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
 import scala.swing.Dialog
-
 import com.ftl.logview.gui.LogViewFrame
 import com.ftl.logview.logic.FileChangeWatcher
-
 import javax.swing.text.StyleConstants
 import javax.swing.text.StyleContext
 import logic.StyleUtil
+import com.ftl.logview.gui.Shortcuts
 
 /**
  * Contains everything for one log file handling
@@ -92,10 +90,10 @@ class LogViewBundle(lf: File, pf: Option[File]) {
   /**
    * Set shortcut
    */
-  private def handleShortcut(str:String) {
-    println(str)
+  private def handleShortcut(str: String) {
+    Shortcuts.changeKeyBinding(str)
   }
-  
+
   /**
    * Create a style from the specified string
    */

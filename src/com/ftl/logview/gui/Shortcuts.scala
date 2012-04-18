@@ -1,7 +1,11 @@
 package com.ftl.logview.gui
+
 import java.awt.event.InputEvent
-import javax.swing.KeyStroke
 import java.awt.event.KeyEvent
+
+import javax.swing.AbstractAction
+import javax.swing.JComponent
+import javax.swing.KeyStroke
 
 object Shortcuts {
 
@@ -15,7 +19,7 @@ object Shortcuts {
   var loadedSkippedListMenuItem: Option[KeyStroke] = None
   var loadedHelpMenuItem: Option[KeyStroke] = None
   var loadedAboutMenuItem: Option[KeyStroke] = None
-  
+
   var findKeyStroke: Option[KeyStroke] = None
   var findNextKeyStroke: Option[KeyStroke] = None
 
@@ -40,9 +44,9 @@ object Shortcuts {
   def aboutMenuItem = Some(loadedAboutMenuItem.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK)))
 
   // shortcuts for panel
-  def findShortCut = Some(loadedAboutMenuItem.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK)))
-  def findNextShortcut = Some(loadedAboutMenuItem.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)))
-  
+  def findShortCut = Some(findKeyStroke.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK)))
+  def findNextShortcut = Some(findNextKeyStroke.getOrElse(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)))
+
   def setShortcut(shortcutType: String, shortcut: KeyStroke) {
     require(shortcut != null)
 
@@ -51,15 +55,66 @@ object Shortcuts {
       case None => None
       case Some(s) =>
         s match {
-          case ShortcutType.LOG_FILE_OPEN => loadedFileOpenMenuItem = Some(shortcut)
+          case ShortcutType.FIND => loadedFileOpenMenuItem = Some(shortcut)
         }
     }
 
   }
 
   object ShortcutType extends Enumeration {
-    val LOG_FILE_OPEN, PROPERTY_FILE_OPEN = Value
+    val FIND, FIND_NEXT = Value
 
   }
 
+  /**
+   * stringToProcess: you get this string from propeorty file (example: FIND = control F)
+   */
+  def changeKeyBinding(stringToProcess: String) {
+    require(stringToProcess != null)
+
+    val equalPosition = stringToProcess.indexOf("=")
+    if (equalPosition == -1) {
+      println("invalid property: " + stringToProcess)
+      return ;
+    }
+
+    val stTypeText = stringToProcess.substring(0, equalPosition).trim.toUpperCase
+    val stType = ShortcutType.values.find(_.toString == stTypeText)
+    stType match {
+      case None => println("Invalid shortcut type: " + stTypeText)
+      case Some(s) =>
+        s match {
+          case ShortcutType.FIND => findKeyStroke = Some(KeyStroke.getKeyStroke(stringToProcess.substring(equalPosition + 1, stringToProcess.length)))
+          case ShortcutType.FIND_NEXT => findNextKeyStroke = Some(KeyStroke.getKeyStroke(stringToProcess.substring(equalPosition + 1, stringToProcess.length)))
+        }
+    }
+
+  }
+
+  // http://tips4java.wordpress.com/2008/10/10/key-bindings/	
+  def addKeyBinding(component: JComponent, keyBinding: String, action: AbstractAction) {
+    require(component != null && keyBinding != null && action != null)
+
+    val keyStroke = KeyStroke.getKeyStroke(keyBinding);
+    component.getInputMap().put(keyStroke, keyBinding);
+    component.getActionMap().put(keyBinding, action);
+  }
+
+  def addKeyBinding(component: JComponent, keyStroke: Option[KeyStroke], action: AbstractAction) {
+    keyStroke match {
+      case None => None
+      case Some(s) =>
+        component.getInputMap().put(s, s.toString);
+        component.getActionMap().put(s.toString, action);
+    }
+  }
+
+  def removeKeyBinding(component: JComponent, keyStroke: Option[KeyStroke]) {
+    keyStroke match {
+      case None => None
+      case Some(s) =>
+        component.getInputMap().remove(s)
+        component.getActionMap.remove(s.toString)
+    }
+  }
 }
