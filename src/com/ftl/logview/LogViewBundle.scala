@@ -4,15 +4,20 @@ import java.awt.Color
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
+
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
 import scala.swing.Dialog
+
 import com.ftl.logview.gui.LogViewFrame
+import com.ftl.logview.gui.Shortcuts
 import com.ftl.logview.logic.FileChangeWatcher
+import com.ftl.logview.model.Highlighted
+import com.ftl.logview.model.Skipped
+
 import javax.swing.text.StyleConstants
 import javax.swing.text.StyleContext
 import logic.StyleUtil
-import com.ftl.logview.gui.Shortcuts
 
 /**
  * Contains everything for one log file handling
@@ -27,8 +32,8 @@ class LogViewBundle(lf: File, pf: Option[File]) {
 
   var sc = new StyleContext
 
-  var skippedList = new ListBuffer[String]
-  var styles = Map.empty[String, String]
+  var skippedList = new ListBuffer[Skipped]
+  var styles = Map.empty[String, Highlighted]
 
   if (!propertyFile.isEmpty) {
     propertiesLoading()
@@ -44,15 +49,13 @@ class LogViewBundle(lf: File, pf: Option[File]) {
    * Load properties. No refresh
    */
   def propertiesLoading() {
-
     val commentExpression = """^[\[](.)*[\]]$"""
-    val skippedExpression = "(.)+"
-    val styleExpression = "[a-f|A-F|0-9]{6},[ ][a-f|A-F|0-9]{6},[ ](.)*"
-    val shortcutExpression = "[A-Z_]*[ ]*=[ ]*(control|alt)[ ]*[A-Z]"
+    val skippedExpression = "[ ]*(LINE|line|EXP|exp)[ ]*,[ ]*(.)+"
+    val styleExpression = "[a-f|A-F|0-9]{6},[ ][a-f|A-F|0-9]{6},[ ]*(LINE|line|EXP|exp)[ ]*,[ ](.)*"
+    val shortcutExpression = "[A-Z_]*[ ]*=[ ]*(control|alt)[ ]*[A-Z][ ]*"
 
     try {
       for (line <- Source.fromFile(propertyFile.get).getLines()) {
-
         commentExpression.r.findFirstMatchIn(line) match {
           case Some(s) => None
           case None => styleExpression.r.findFirstIn(line) match {
@@ -61,7 +64,7 @@ class LogViewBundle(lf: File, pf: Option[File]) {
               case Some(s) => handleShortcut(s)
               case None => skippedExpression.r.findFirstIn(line) match {
                 case None => None
-                case Some(s) => skippedList += s
+                case Some(s) => skippedList += Skipped.createSkipped(s)
               }
             }
           }
@@ -98,14 +101,10 @@ class LogViewBundle(lf: File, pf: Option[File]) {
    * Create a style from the specified string
    */
   private def createStyle(str: String) {
-    val parameters = str.trim().split(",")
+    val highlighted = Highlighted.createHighlighted(str)
 
-    val fg: Color = new Color(Integer.parseInt(parameters(0).trim(), 16))
-    val bg: Color = new Color(Integer.parseInt(parameters(1).trim(), 16))
-    val exp = parameters(2).trim()
-
-    StyleUtil.addStyle(sc, exp, fg, bg)
-    styles += (exp -> exp)
+    StyleUtil.addStyle(sc, highlighted.name, highlighted.fgColor, highlighted.bgColor)
+    styles += (highlighted.name -> highlighted)
   }
 
   /**

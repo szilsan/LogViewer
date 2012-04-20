@@ -12,6 +12,8 @@ import com.ftl.logview.LogViewBundle
 import javax.swing.JColorChooser
 import com.ftl.logview.logic.StyleUtil
 import javax.swing.text.StyleConstants
+import com.ftl.logview.model.Highlighted
+import com.ftl.logview.model.ExpressionType
 
 /**
  * Style input panel - get style expression and Color
@@ -63,8 +65,9 @@ class StyleInputPanel(bundle: LogViewBundle, initialExp: String = "") extends Di
         bundle.styles -= initialExp
 
         // add as new
-        StyleUtil.addStyle(bundle.sc, expression.text, expColorFg, expColorBg)
-        bundle.styles += (expression.text -> expression.text)
+        val newStyle = new Highlighted(expression.text, ExpressionType.LINE, expColorFg, expColorBg)
+        StyleUtil.addStyle(bundle.sc, newStyle.exp, newStyle.fgColor, newStyle.bgColor)
+        bundle.styles += (newStyle.name -> newStyle)
         StyleInputPanel.this.close()
     }
   }

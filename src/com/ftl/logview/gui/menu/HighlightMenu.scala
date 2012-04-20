@@ -22,6 +22,7 @@ import javax.swing.KeyStroke
 import java.awt.event.InputEvent
 import com.ftl.logview.gui.Shortcuts
 import scala.swing.event.Key
+import com.ftl.logview.model.Skipped
 
 object HighlightMenu extends Menu("Highlight") {
   
@@ -82,7 +83,7 @@ object HighlightMenu extends Menu("Highlight") {
 
   //Skipped expressions handling
   private def skippedList(bundle: LogViewBundle): Seq[Label] = {
-    for (skipped <- bundle.skippedList) yield new Label(skipped) { opaque = true; horizontalAlignment = Alignment.Left }
+    for (skipped <- bundle.skippedList) yield new Label(skipped.exp) { opaque = true; horizontalAlignment = Alignment.Left }
   }
 
   private def doOnAddSkipExpression(bundle: LogViewBundle) {
@@ -92,7 +93,7 @@ object HighlightMenu extends Menu("Highlight") {
     skipExpression match {
       case None => None
       case Some(exp) =>
-        bundle.skippedList += exp
+        bundle.skippedList += Skipped.createSkipped(exp)
         bundle.logViewFrame.reloadData
     }
   }
@@ -104,14 +105,14 @@ object HighlightMenu extends Menu("Highlight") {
     skipExpression match {
       case None => None
       case Some(exp) =>
-        bundle.skippedList -= expression
-        bundle.skippedList += exp
+        bundle.skippedList -= bundle.skippedList.filter(_.exp == expression)(0)
+        bundle.skippedList += Skipped.createSkipped(exp)
         bundle.logViewFrame.reloadData
     }
   }
 
   private def doOnDeleteSkipExpression(bundle: LogViewBundle, expression: String) {
-    bundle.skippedList -= expression
+    bundle.skippedList -= bundle.skippedList.filter(_.exp == expression)(0)
     bundle.logViewFrame.reloadData
   }
 
