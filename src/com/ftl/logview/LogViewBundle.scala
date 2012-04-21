@@ -35,8 +35,9 @@ class LogViewBundle(lf: File, pf: Option[File]) {
   var skippedList = new ListBuffer[Skipped]
   var styles = Map.empty[String, Highlighted]
 
-  if (!propertyFile.isEmpty) {
-    propertiesLoading()
+  propertyFile match {
+    case None => None
+    case Some(s) => propertiesLoading
   }
 
   // watcher for log file changing

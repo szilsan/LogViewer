@@ -16,7 +16,7 @@ object LogViewApp extends SwingApplication {
     // argument is needed
     if (args.length == 0) {
       println("Usage: [log_file] properties_file ")
-      exit(0)
+      sys.exit(0)
     }
 
     // log file
@@ -31,10 +31,9 @@ object LogViewApp extends SwingApplication {
     }
 
     // create first log viewer
-    new LogViewBundle(fLog, Some(fProperties))
+    new LogViewBundle(fLog, if (fProperties == null) None else Some(fProperties))
 
     // view
-    LogViewMainFrame.pack()
     LogViewMainFrame.visible=true
   }
 
@@ -44,20 +43,23 @@ object LogViewApp extends SwingApplication {
   def resourceFromUserDirectory(path: String): java.io.File =
     new java.io.File(util.Properties.userDir, path)
 
+  /**
+   * Check whether the file is OK or not
+   */
   private def fileCheck(f: File) {
     if (!f.exists()) {
       println("File does not exist! " + "File: " + f.getAbsoluteFile())
-      exit(-1)
+      sys.exit(-1)
     }
 
     if (!f.isFile()) {
       println("Parameter is not a file!" + "File: " + f.getAbsoluteFile())
-      exit(-1)
+      sys.exit(-1)
     }
 
     if (!f.canRead()) {
       println("File is not readable!" + "File: " + f.getAbsoluteFile())
-      exit(-1)
+      sys.exit(-1)
     }
   }
 }

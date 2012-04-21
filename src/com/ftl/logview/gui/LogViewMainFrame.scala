@@ -21,6 +21,7 @@ object LogViewMainFrame extends MainFrame {
 
   val windowSizeX = 800
   val windowSizeY = 600
+  
   preferredSize = new Dimension(windowSizeX, windowSizeY)
 
   var tabbedPane = new TabbedPane
