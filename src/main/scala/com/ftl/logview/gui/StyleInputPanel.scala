@@ -101,7 +101,7 @@ class StyleInputPanel(bundle: LogViewBundle, initialExp: Highlighted) extends Di
     buttons += skippedRadio
     buttons += highlightedRadio
   }
-  
+
   if (initialExp.highlightType == HighlightType.HIGHLIGHTED) {
     highlightedRadio.selected = true
   } else {

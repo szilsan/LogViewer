@@ -32,7 +32,7 @@ class Highlighted(expression: String, affectTypeParam: AffectType.Value = Affect
 }
 
 object Highlighted {
-  def createHighlighted(description: String):Option[Highlighted] = {
+  def createHighlighted(description: String): Option[Highlighted] = {
     val parameters = description.trim().split(",")
 
     val fgColor: Color = new Color(Integer.parseInt(parameters(0).trim(), 16))

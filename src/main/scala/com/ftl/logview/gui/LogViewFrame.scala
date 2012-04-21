@@ -16,14 +16,14 @@ class LogViewFrame(viewBundle: LogViewBundle) extends BorderPanel {
   createGui
   var page = new TabbedPane.Page(viewBundle.logFile.getName(), this, viewBundle.logFile.getAbsolutePath())
   LogViewMainFrame.tabAndBundle.put(page, viewBundle)
-  
+
   LogViewMainFrame.tabbedPane.pages += page
-  
+
   // init data
   refreshData
-  
+
   logViewPanel.requestFocus
-  
+
   listenTo(this)
   reactions += {
     case WindowClosing(e) => {
@@ -36,7 +36,7 @@ class LogViewFrame(viewBundle: LogViewBundle) extends BorderPanel {
   def refreshData = {
     logViewPanel.refreshData
   }
-  
+
   // reload log file
   def reloadData = {
     logViewPanel.reloadData

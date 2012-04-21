@@ -69,13 +69,13 @@ class LogViewPanel(bundle: LogViewBundle) extends BorderPanel {
     DocumentUtil.highlightText(doc, bundle.sc, bundle.styles.toList, editorPane.getText())
     refreshShortcutsOnEditorpane
   }
-  
+
   private def refreshShortcutsOnEditorpane() {
     Shortcuts.removeKeyBinding(editorPane, ShortcutType.FIND.toString)
     Shortcuts.removeKeyBinding(editorPane, ShortcutType.FIND_NEXT.toString)
-    
+
     Shortcuts.addKeyBinding(editorPane, Shortcuts.findShortCut, findAction, ShortcutType.FIND.toString)
-    Shortcuts.addKeyBinding(editorPane, Shortcuts.findNextShortcut, refindAction,ShortcutType.FIND_NEXT.toString)
+    Shortcuts.addKeyBinding(editorPane, Shortcuts.findNextShortcut, refindAction, ShortcutType.FIND_NEXT.toString)
   }
 
   // GUI

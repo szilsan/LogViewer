@@ -24,7 +24,7 @@ object LogViewApp extends SwingApplication {
     fileCheck(fLog)
 
     // properties file
-    var fProperties:File = null 
+    var fProperties: File = null
     if (args.length == 2) {
       fProperties = resourceFromUserDirectory(args(1))
       fileCheck(fProperties)
@@ -34,7 +34,7 @@ object LogViewApp extends SwingApplication {
     new LogViewBundle(fLog, if (fProperties == null) None else Some(fProperties))
 
     // view
-    LogViewMainFrame.visible=true
+    LogViewMainFrame.visible = true
   }
 
   def resourceFromClassloader(path: String): java.net.URL =

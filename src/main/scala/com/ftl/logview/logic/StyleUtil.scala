@@ -21,7 +21,7 @@ object StyleUtil {
 
   def addStyle(sc: StyleContext, name: String, fg: Color, bg: Color) {
     require(sc != null && sc != None)
-    
+
     StyleUtil.configureStyle(sc.addStyle(name, null), Some(bg), Some(fg))
   }
 

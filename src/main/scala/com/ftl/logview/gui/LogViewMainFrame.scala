@@ -16,12 +16,12 @@ object LogViewMainFrame extends MainFrame {
 
   // to know which tab is connected to which bundle
   var tabAndBundle = Map.empty[TabbedPane.Page, LogViewBundle]
-  
+
   title = "LogViewer"
 
   val windowSizeX = 800
   val windowSizeY = 600
-  
+
   preferredSize = new Dimension(windowSizeX, windowSizeY)
 
   var tabbedPane = new TabbedPane
