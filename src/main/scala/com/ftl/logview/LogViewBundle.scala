@@ -112,7 +112,6 @@ class LogViewBundle(lf: File, pf: Option[File]) {
     require(file != null)
 
     propertyFile = new Some(file)
-    var message = ""
 
     val fw = new FileWriter(propertyFile.get)
     try {
@@ -127,14 +126,13 @@ class LogViewBundle(lf: File, pf: Option[File]) {
       fw.write("\n[Log pattern]")
       // TODO
 
-      message = "Property file is saved"
+      "Property file is saved"
     } catch {
       case ioex: IOException => {
-        message = "Error:" + ioex.getMessage()
+        "Error:" + ioex.getMessage()
       }
     } finally {
       fw.close()
     }
-    message
   }
 }
