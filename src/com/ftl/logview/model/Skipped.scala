@@ -5,6 +5,10 @@ class Skipped(expression: String, expressionType: ExpressionType.Value = Express
   override def toString() = {
     "Skipped[expression= " + expression + " type= " + expressionType.toString + "]"
   }
+
+  override def toSave() = {
+    expressionType.toString + "," + expression
+  }
 }
 
 object Skipped {

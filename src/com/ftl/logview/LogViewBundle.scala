@@ -1,6 +1,5 @@
 package com.ftl.logview
 
-import java.awt.Color
 import java.io.File
 import java.io.FileWriter
 import java.io.IOException
@@ -15,7 +14,6 @@ import com.ftl.logview.logic.FileChangeWatcher
 import com.ftl.logview.model.Highlighted
 import com.ftl.logview.model.Skipped
 
-import javax.swing.text.StyleConstants
 import javax.swing.text.StyleContext
 import logic.StyleUtil
 
@@ -52,7 +50,7 @@ class LogViewBundle(lf: File, pf: Option[File]) {
   def propertiesLoading() {
     val commentExpression = """^[\[](.)*[\]]$"""
     val skippedExpression = "[ ]*(LINE|line|EXP|exp)[ ]*,[ ]*(.)+"
-    val styleExpression = "[a-f|A-F|0-9]{6},[ ][a-f|A-F|0-9]{6},[ ]*(LINE|line|EXP|exp)[ ]*,[ ](.)*"
+    val styleExpression = "[a-f|A-F|0-9]{6},[ ]*[a-f|A-F|0-9]{6},[ ]*(LINE|line|EXP|exp)[ ]*,[ ]*(.)*"
     val shortcutExpression = "[A-Z_]*[ ]*=[ ]*(control|alt)[ ]*[A-Z][ ]*"
 
     try {
@@ -120,17 +118,20 @@ class LogViewBundle(lf: File, pf: Option[File]) {
     val fw = new FileWriter(propertyFile.get)
     try {
       // skipped expressions
-      fw.write("[Skipped]\n")
-      skippedList.foreach(s => fw.write(s + "\n"))
+      fw.write("[Skipped: line or expression skipped, expression]\n")
+      skippedList.foreach(s => fw.write(s.toSave + "\n"))
 
       // styles
-      fw.write("\n[Styles]\n")
-      for (styleName <- styles.keys) {
-        val style = sc.getStyle(styleName)
-        fw.write(style.getAttribute(StyleConstants.Foreground).asInstanceOf[Color].getRGB().toHexString.substring(2) + ", " +
-          style.getAttribute(StyleConstants.Background).asInstanceOf[Color].getRGB().toHexString.substring(2) + ", " +
-          styleName + "\n")
-      }
+      fw.write("\n[Styles: background color, foreground color, line or expression highlighting, expression]\n")
+      styles.keys.foreach(s => fw.write(styles.get(s).get.toSave + "\n"))
+
+      // shortcuts
+      fw.write("\n[Shortcuts]")
+      // TODO
+
+      fw.write("\n[Log pattern]")
+      // TODO
+
       message = "Property file is saved"
     } catch {
       case ioex: IOException => {

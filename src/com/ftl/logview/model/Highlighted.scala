@@ -21,6 +21,10 @@ class Highlighted(expression: String, expressionType: ExpressionType.Value = Exp
   override def toString() = {
     "Highlighted[expression= " + expression + " type= " + expressionType.toString + " bgColor= " + bgColor + " fgColor=" + fgColor
   }
+
+  override def toSave = {
+    fgColor.getRGB().toHexString.substring(2) + "," + bgColor.getRGB().toHexString.substring(2) + "," + expType.toString + "," + exp
+  }
 }
 
 object Highlighted {

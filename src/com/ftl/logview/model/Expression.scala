@@ -6,4 +6,6 @@ package com.ftl.logview.model
 abstract class Expression(expression: String, expressionType: ExpressionType.Value = ExpressionType.LINE) {
   def exp = expression
   def expType = expressionType
+  
+  def toSave:String
 }
