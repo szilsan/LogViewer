@@ -13,8 +13,6 @@ class Highlighted(expression: String, affectTypeParam: AffectType.Value = Affect
   var bgColor = Color.WHITE
   var fgColor = Color.BLACK
 
-  def name = expression
-
   def this(expression: String, affectType: AffectType.Value, highlighTypeParam: HighlightType.Value, bgColor: Color, fgColor: Color) {
     this(expression, affectType, highlighTypeParam)
     this.bgColor = bgColor

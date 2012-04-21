@@ -65,8 +65,8 @@ class LogViewPanel(bundle: LogViewBundle) extends BorderPanel {
         return
       }
     }
-    editorPane.setText(TextUtil.deleteSkippedTexts(editorPane.getText(), bundle.styles))
-    DocumentUtil.highlightText(doc, bundle.sc, bundle.styles, editorPane.getText())
+    editorPane.setText(TextUtil.deleteSkippedTexts(editorPane.getText(), bundle.styles.toList))
+    DocumentUtil.highlightText(doc, bundle.sc, bundle.styles.toList, editorPane.getText())
     refreshShortcutsOnEditorpane
   }
   

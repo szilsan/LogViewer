@@ -23,13 +23,14 @@ import java.awt.event.InputEvent
 import com.ftl.logview.gui.Shortcuts
 import scala.swing.event.Key
 import com.ftl.logview.model.Highlighted
+import scala.collection.mutable.ListBuffer
 
 object HighlightMenu extends Menu("Highlight") {
-  
+
   mnemonic = Key.L
-  
+
   val highlightedMenuText = "Highlighted expressions"
-   val highlightMenuItem = new MenuItem(new Action(highlightedMenuText) {
+  val highlightMenuItem = new MenuItem(new Action(highlightedMenuText) {
     mnemonic = KeyEvent.VK_I
     accelerator = Shortcuts.highlightListMenuItem
     def apply() {}
@@ -63,13 +64,17 @@ object HighlightMenu extends Menu("Highlight") {
 
   // Styles
   private def highlightList(bundle: LogViewBundle): Seq[Label] = {
-    (for (style <- bundle.styles.keySet)
-      yield new Label(style) {
-      background = bundle.sc.getStyle(style).getAttribute(StyleConstants.Background).asInstanceOf[Color]
-      foreground = bundle.sc.getStyle(style).getAttribute(StyleConstants.Foreground).asInstanceOf[Color]
-      opaque = true
-      horizontalAlignment = Alignment.Left
-    }).toSeq
+    val labels = ListBuffer.empty[Label]
+    for (e <- bundle.styles) {
+      labels += new Label(e.exp) {
+        background = e.bgColor
+        foreground = e.fgColor
+        opaque = true
+        horizontalAlignment = Alignment.Left
+      }
+    }
+
+    labels.toSeq
   }
 
   private def doOnAddHighlightExpression(bundle: LogViewBundle) {
@@ -77,12 +82,12 @@ object HighlightMenu extends Menu("Highlight") {
     bundle.logViewFrame.reloadData
   }
 
-  private def doOnEditHighlightExpression(bundle: LogViewBundle, expression: String) {
-    new StyleInputPanel(bundle, bundle.styles.get(expression).get)
+  private def doOnEditHighlightExpression(bundle: LogViewBundle, expression: Highlighted) {
+    new StyleInputPanel(bundle, expression)
     bundle.logViewFrame.reloadData
   }
 
-  private def doOnDeleteHighlightExpression(bundle: LogViewBundle, expression: String) {
+  private def doOnDeleteHighlightExpression(bundle: LogViewBundle, expression: Highlighted) {
     bundle.styles -= expression
     bundle.logViewFrame.reloadData
   }

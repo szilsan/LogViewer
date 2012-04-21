@@ -61,7 +61,7 @@ class StyleInputPanel(bundle: LogViewBundle, initialExp: Highlighted) extends Di
     reactions += {
       case ButtonClicked(b) =>
         // remove old
-        bundle.styles -= initialExp.exp
+        bundle.styles -= initialExp
 
         // add as new
         val newStyle = new Highlighted(expression.text,
@@ -69,7 +69,7 @@ class StyleInputPanel(bundle: LogViewBundle, initialExp: Highlighted) extends Di
           if (skippedRadio.selected) HighlightType.SKIPPED else HighlightType.HIGHLIGHTED,
           initialExp.bgColor, initialExp.fgColor)
         StyleUtil.addStyle(bundle.sc, newStyle.exp, newStyle.fgColor, newStyle.bgColor)
-        bundle.styles += (newStyle.name -> newStyle)
+        bundle.styles += (newStyle)
         StyleInputPanel.this.close()
     }
   }
@@ -100,6 +100,12 @@ class StyleInputPanel(bundle: LogViewBundle, initialExp: Highlighted) extends Di
   val styleBtnGroup = new ButtonGroup {
     buttons += skippedRadio
     buttons += highlightedRadio
+  }
+  
+  if (initialExp.highlightType == HighlightType.HIGHLIGHTED) {
+    highlightedRadio.selected = true
+  } else {
+    skippedRadio.selected = true
   }
 
   contents = new BorderPanel {

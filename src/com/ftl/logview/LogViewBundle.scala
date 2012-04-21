@@ -29,7 +29,7 @@ class LogViewBundle(lf: File, pf: Option[File]) {
 
   var sc = new StyleContext
 
-  var styles = Map.empty[String, Highlighted]
+  var styles = ListBuffer.empty[Highlighted]
 
   propertyFile match {
     case None => None
@@ -100,8 +100,8 @@ class LogViewBundle(lf: File, pf: Option[File]) {
     highlighted match {
       case None => println("Style can not be created: " + str)
       case Some(s) =>
-        StyleUtil.addStyle(sc, s.name, s.fgColor, s.bgColor)
-        styles += (s.exp -> s)
+        StyleUtil.addStyle(sc, s.exp, s.fgColor, s.bgColor)
+        styles += s
     }
   }
 
@@ -118,7 +118,7 @@ class LogViewBundle(lf: File, pf: Option[File]) {
     try {
       // styles
       fw.write("\n[Styles: background color, foreground color, line or expression highlighting, skipped or highlighted, expression]\n")
-      styles.keys.foreach(s => fw.write(styles.get(s).get.toSave + "\n"))
+      styles.foreach(s => fw.write(s.toSave + "\n"))
 
       // shortcuts
       fw.write("\n[Shortcuts]")

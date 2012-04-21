@@ -1,6 +1,5 @@
 package com.ftl.logview.gui
 import java.awt.Dimension
-
 import scala.annotation.implicitNotFound
 import scala.swing.event.ButtonClicked
 import scala.swing.BorderPanel
@@ -9,8 +8,8 @@ import scala.swing.Dialog
 import scala.swing.FlowPanel
 import scala.swing.Label
 import scala.swing.ListView
-
 import com.ftl.logview.LogViewBundle
+import com.ftl.logview.model.Highlighted
 
 /**
  * Show skipped expressions.
@@ -20,8 +19,8 @@ import com.ftl.logview.LogViewBundle
 class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
   refresh: LogViewBundle => Seq[Label],
   doOnNewExpression: LogViewBundle => Unit,
-  doOnDeleteExpression: (LogViewBundle, String) => Unit,
-  doOnEdit: (LogViewBundle, String) => Unit,
+  doOnDeleteExpression: (LogViewBundle, Highlighted) => Unit,
+  doOnEdit: (LogViewBundle, Highlighted) => Unit,
   listViewRenderer: Option[ListView.Renderer[Label]]) extends Dialog {
 
   require(bundle != null)
@@ -92,11 +91,12 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
     expList.listData = data
   }
 
-  def doOnButtonClicked(action: (LogViewBundle, String) => Unit) {
+  def doOnButtonClicked(action: (LogViewBundle, Highlighted) => Unit) {
     if (expList.selection.items.isEmpty) {
       Dialog.showMessage(null, "No expressions is selected", "Warning", Dialog.Message.Warning)
     } else {
-      action(bundle, expList.selection.items.first.text)
+      val exp = bundle.styles.filter(_.exp == expList.selection.items.head.text)(0)
+      action(bundle, exp)
       refreshData(refresh(bundle))
     }
   }

@@ -1,9 +1,11 @@
 package com.ftl.logview.logic
 
+import scala.collection.mutable.ListBuffer
 import scala.collection.mutable.ArrayBuffer
-import com.ftl.logview.model.Highlighted
+
 import com.ftl.logview.model.AffectType
 import com.ftl.logview.model.HighlightType
+import com.ftl.logview.model.Highlighted
 
 /**
  * Common text utils
@@ -37,12 +39,12 @@ object TextUtil {
   /**
    * Delete unwanted text from a text. Skipped texts are in a List called skipped. It can contain regular expressions.
    */
-  def deleteSkippedTexts(text: String, skipped: Map[String, Highlighted]): String = {
+  def deleteSkippedTexts(text: String, skipped: List[Highlighted]): String = {
     require(text != null)
 
     var sb: String = text
 
-    for ((k,s) <- skipped if s.highlightType == HighlightType.SKIPPED) {
+    for (s <- skipped if s.highlightType == HighlightType.SKIPPED) {
       sb = (if (s.affectType == AffectType.LINE) "(.)*" + s.exp + "(.)*[\r\n]*" else s.exp).r.replaceAllIn(sb, "")
     }
 
