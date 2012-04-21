@@ -64,17 +64,15 @@ object HighlightMenu extends Menu("Highlight") {
 
   // Styles
   private def highlightList(bundle: LogViewBundle): Seq[Label] = {
-    val labels = ListBuffer.empty[Label]
-    for (e <- bundle.styles) {
-      labels += new Label(e.exp) {
-        background = e.bgColor
-        foreground = e.fgColor
-        opaque = true
-        horizontalAlignment = Alignment.Left
-      }
-    }
 
-    labels.toSeq
+    (for (style <- bundle.styles)
+      yield new Label(style.exp) {
+      background = style.bgColor
+      foreground = style.fgColor
+      opaque = true
+      horizontalAlignment = Alignment.Left
+    }).toSeq
+
   }
 
   private def doOnAddHighlightExpression(bundle: LogViewBundle) {
