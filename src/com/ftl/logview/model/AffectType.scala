@@ -1,5 +1,5 @@
 package com.ftl.logview.model
 
-object ExpressionType extends Enumeration{
+object AffectType extends Enumeration{
   val LINE, EXP = Value
 }

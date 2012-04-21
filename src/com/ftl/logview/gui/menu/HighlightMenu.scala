@@ -22,7 +22,7 @@ import javax.swing.KeyStroke
 import java.awt.event.InputEvent
 import com.ftl.logview.gui.Shortcuts
 import scala.swing.event.Key
-import com.ftl.logview.model.Skipped
+import com.ftl.logview.model.Highlighted
 
 object HighlightMenu extends Menu("Highlight") {
   
@@ -48,26 +48,6 @@ object HighlightMenu extends Menu("Highlight") {
   }
   contents += highlightMenuItem
 
-  val skippedMenuText = "Skiped expressions"
-  contents += new MenuItem(new Action(skippedMenuText) {
-    mnemonic = KeyEvent.VK_K
-    accelerator = Shortcuts.skippedListMenuItem
-    def apply() {}
-  }) {
-    reactions += {
-      case ButtonClicked(b) => {
-        doOnMenuSelect(
-          (bundle: LogViewBundle) => {
-            require(bundle != null)
-            new ExpListDialog(skippedMenuText,
-              bundle, skippedList,
-              doOnAddSkipExpression, doOnDeleteSkipExpression, doOnEditSkipExpression,
-              None)
-          })
-      }
-    }
-  }
-
   def doOnMenuSelect(doFunc: LogViewBundle => Unit) {
     if (LogViewMainFrame.tabAndBundle.nonEmpty) {
       var page = LogViewMainFrame.tabbedPane.selection
@@ -79,41 +59,6 @@ object HighlightMenu extends Menu("Highlight") {
     } else {
       Dialog.showMessage(null, "There is no tab opened", "Warning", Dialog.Message.Warning)
     }
-  }
-
-  //Skipped expressions handling
-  private def skippedList(bundle: LogViewBundle): Seq[Label] = {
-    for (skipped <- bundle.skippedList) yield new Label(skipped.exp) { opaque = true; horizontalAlignment = Alignment.Left }
-  }
-
-  private def doOnAddSkipExpression(bundle: LogViewBundle) {
-    require(bundle != null)
-
-    val skipExpression = Dialog.showInput[String](null, "Skip text expression", "Skipped text", Dialog.Message.Question, null, Seq.empty, null)
-    skipExpression match {
-      case None => None
-      case Some(exp) =>
-        bundle.skippedList += Skipped.createSkipped(exp)
-        bundle.logViewFrame.reloadData
-    }
-  }
-
-  private def doOnEditSkipExpression(bundle: LogViewBundle, expression: String) {
-    require(bundle != null && expression != null)
-
-    val skipExpression = Dialog.showInput[String](null, "Skip text expression", "Skipped text", Dialog.Message.Question, null, Seq.empty, expression)
-    skipExpression match {
-      case None => None
-      case Some(exp) =>
-        bundle.skippedList -= bundle.skippedList.filter(_.exp == expression)(0)
-        bundle.skippedList += Skipped.createSkipped(exp)
-        bundle.logViewFrame.reloadData
-    }
-  }
-
-  private def doOnDeleteSkipExpression(bundle: LogViewBundle, expression: String) {
-    bundle.skippedList -= bundle.skippedList.filter(_.exp == expression)(0)
-    bundle.logViewFrame.reloadData
   }
 
   // Styles
@@ -128,12 +73,12 @@ object HighlightMenu extends Menu("Highlight") {
   }
 
   private def doOnAddHighlightExpression(bundle: LogViewBundle) {
-    new StyleInputPanel(bundle)
+    new StyleInputPanel(bundle, new Highlighted(""))
     bundle.logViewFrame.reloadData
   }
 
-  private def doOnEditHighlightExpression(bundle: LogViewBundle, expression: String = "") {
-    new StyleInputPanel(bundle, expression)
+  private def doOnEditHighlightExpression(bundle: LogViewBundle, expression: String) {
+    new StyleInputPanel(bundle, bundle.styles.get(expression).get)
     bundle.logViewFrame.reloadData
   }
 

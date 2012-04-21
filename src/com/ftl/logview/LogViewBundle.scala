@@ -12,7 +12,6 @@ import com.ftl.logview.gui.LogViewFrame
 import com.ftl.logview.gui.Shortcuts
 import com.ftl.logview.logic.FileChangeWatcher
 import com.ftl.logview.model.Highlighted
-import com.ftl.logview.model.Skipped
 
 import javax.swing.text.StyleContext
 import logic.StyleUtil
@@ -30,7 +29,6 @@ class LogViewBundle(lf: File, pf: Option[File]) {
 
   var sc = new StyleContext
 
-  var skippedList = new ListBuffer[Skipped]
   var styles = Map.empty[String, Highlighted]
 
   propertyFile match {
@@ -50,7 +48,7 @@ class LogViewBundle(lf: File, pf: Option[File]) {
   def propertiesLoading() {
     val commentExpression = """^[\[](.)*[\]]$"""
     val skippedExpression = "[ ]*(LINE|line|EXP|exp)[ ]*,[ ]*(.)+"
-    val styleExpression = "[a-f|A-F|0-9]{6},[ ]*[a-f|A-F|0-9]{6},[ ]*(LINE|line|EXP|exp)[ ]*,[ ]*(.)*"
+    val styleExpression = "[a-f|A-F|0-9]{6},[ ]*[a-f|A-F|0-9]{6},[ ]*(LINE|line|EXP|exp)[ ]*,[ ]*(SKIPPED|skipped|HIGHLIGHTED|highlighted)[ ]*,[ ]*(.)*"
     val shortcutExpression = "[A-Z_]*[ ]*=[ ]*(control|alt)[ ]*[A-Z][ ]*"
 
     try {
@@ -61,10 +59,7 @@ class LogViewBundle(lf: File, pf: Option[File]) {
             case Some(s) => createStyle(s)
             case None => shortcutExpression.r.findFirstIn(line) match {
               case Some(s) => handleShortcut(s)
-              case None => skippedExpression.r.findFirstIn(line) match {
-                case None => None
-                case Some(s) => skippedList += Skipped.createSkipped(s)
-              }
+              case None => None
             }
           }
         }
@@ -102,8 +97,12 @@ class LogViewBundle(lf: File, pf: Option[File]) {
   private def createStyle(str: String) {
     val highlighted = Highlighted.createHighlighted(str)
 
-    StyleUtil.addStyle(sc, highlighted.name, highlighted.fgColor, highlighted.bgColor)
-    styles += (highlighted.name -> highlighted)
+    highlighted match {
+      case None => println("Style can not be created: " + str)
+      case Some(s) =>
+        StyleUtil.addStyle(sc, s.name, s.fgColor, s.bgColor)
+        styles += (s.exp -> s)
+    }
   }
 
   /**
@@ -117,12 +116,8 @@ class LogViewBundle(lf: File, pf: Option[File]) {
 
     val fw = new FileWriter(propertyFile.get)
     try {
-      // skipped expressions
-      fw.write("[Skipped: line or expression skipped, expression]\n")
-      skippedList.foreach(s => fw.write(s.toSave + "\n"))
-
       // styles
-      fw.write("\n[Styles: background color, foreground color, line or expression highlighting, expression]\n")
+      fw.write("\n[Styles: background color, foreground color, line or expression highlighting, skipped or highlighted, expression]\n")
       styles.keys.foreach(s => fw.write(styles.get(s).get.toSave + "\n"))
 
       // shortcuts

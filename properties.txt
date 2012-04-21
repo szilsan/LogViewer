@@ -1,12 +1,9 @@
-[Skipped: line or expression skipped, expression]
-EXP, \d
-EXP, Class
-LINE, INFO
-
 [Styles: background color, foreground color, line or expression highlighting, expression]
-000000, ff0000, LINE, DEBUG
-000000, ffff00, LINE, INFO
-000000, 3300ff, EXP, com
+000000, ff0000, LINE, HIGHLIGHTED, DEBUG
+000000, 3300ff, EXP, HIGHLIGHTED, com
+000000, ff0000, EXP, SKIPPED, \d
+000000, ff0000, EXP, SKIPPED, Class
+000000, ff0000, LINE, SKIPPED, INFO
 
 [Shortcuts]
 FIND = control I
