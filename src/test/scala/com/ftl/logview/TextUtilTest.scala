@@ -1,15 +1,20 @@
 package com.ftl.logview
+
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 import org.scalatest.FunSuite
+
 import com.ftl.logview.logic.TextUtil
 
-object TextUtilTest extends FunSuite {
+@RunWith(classOf[JUnitRunner])
+class TextUtilTest extends FunSuite {
 
   test("collect positions") {
     val positions = TextUtil.collectPositions("almat eszik a babam, de eszik, de eszik", "eszik")
     assert(!positions.isEmpty)
     
-    assert(positions.first(0) == 6)
-    assert(positions.first(1) == 5)
+    assert(positions.head(0) == 6)
+    assert(positions.head(1) == 5)
     
     assert(positions(1)(0) == 24)
     assert(positions(1)(1) == 5)
@@ -24,9 +29,4 @@ object TextUtilTest extends FunSuite {
 //    assert(generatedText.indexOf("a") == -1)
 //    assert(generatedText.length() != 0)
   }
-
-  def main(args: Array[String]) {
-    TextUtilTest.execute()
-  }
-
 }
