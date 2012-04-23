@@ -142,7 +142,7 @@ object FileMenu extends Menu("File") {
   }) {
     reactions += {
       case ButtonClicked(b) => {
-        exit(0)
+        sys.exit(0)
       }
     }
     tooltip = "Exit"

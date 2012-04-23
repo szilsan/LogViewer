@@ -10,6 +10,11 @@ import scala.swing.Label
 import scala.swing.ListView
 import com.ftl.logview.LogViewBundle
 import com.ftl.logview.model.Highlighted
+import javax.swing.text.StyleConstants
+import java.awt.Color
+import scala.swing.Alignment
+import scala.swing.Component
+import scala.swing.Panel
 
 /**
  * Show skipped expressions.
@@ -17,11 +22,10 @@ import com.ftl.logview.model.Highlighted
  *
  */
 class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
-  refresh: LogViewBundle => Seq[Label],
+  refresh: LogViewBundle => Seq[ExpDialogPanel],
   doOnNewExpression: LogViewBundle => Unit,
   doOnDeleteExpression: (LogViewBundle, Highlighted) => Unit,
-  doOnEdit: (LogViewBundle, Highlighted) => Unit,
-  listViewRenderer: Option[ListView.Renderer[Label]]) extends Dialog {
+  doOnEdit: (LogViewBundle, Highlighted) => Unit) extends Dialog {
 
   require(bundle != null)
 
@@ -29,13 +33,10 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
   preferredSize = new Dimension(280, 300)
   title = dialogTitle
 
-  var expList = new ListView[Label] {
+  var expList = new ListView[ExpDialogPanel] {
     selection.intervalMode = ListView.IntervalMode.Single
 
-    listViewRenderer match {
-      case None => renderer = ListView.Renderer(_.text)
-      case Some(r) => renderer = r
-    }
+    renderer = new StyleListViewRenderer(bundle)
   }
   refreshData(refresh(bundle))
 
@@ -87,7 +88,7 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
 
   visible = true
 
-  def refreshData(data: Seq[Label]) {
+  def refreshData(data: Seq[ExpDialogPanel]) {
     expList.listData = data
   }
 
@@ -95,9 +96,22 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
     if (expList.selection.items.isEmpty) {
       Dialog.showMessage(null, "No expressions is selected", "Warning", Dialog.Message.Warning)
     } else {
-      val exp = bundle.styles.filter(_.exp == expList.selection.items.head.text)(0)
+      val exp = bundle.styles.filter(_.exp == expList.selection.items.head.style.exp)(0)
       action(bundle, exp)
       refreshData(refresh(bundle))
+    }
+  }
+
+  class StyleListViewRenderer(bundle: LogViewBundle) extends ListView.Renderer[ExpDialogPanel] {
+    override def componentFor(list: ListView[_], isSelected: Boolean, focused: Boolean, a: ExpDialogPanel, index: Int): Component = {
+      if (isSelected) {
+        a.labelLeft.background = Color.BLACK
+        a.labelLeft.foreground = Color.WHITE
+      } else {
+        a.labelLeft.background = Color.WHITE
+        a.labelLeft.foreground = Color.BLACK
+      }
+      a
     }
   }
 }

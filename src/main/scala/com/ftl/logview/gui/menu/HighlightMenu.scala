@@ -24,6 +24,8 @@ import com.ftl.logview.gui.Shortcuts
 import scala.swing.event.Key
 import com.ftl.logview.model.Highlighted
 import scala.collection.mutable.ListBuffer
+import com.ftl.logview.gui.ExpDialogPanel
+import com.ftl.logview.gui.ExpListDialog
 
 object HighlightMenu extends Menu("Highlight") {
 
@@ -42,8 +44,7 @@ object HighlightMenu extends Menu("Highlight") {
             require(bundle != null)
             new ExpListDialog(highlightedMenuText,
               bundle, highlightList,
-              doOnAddHighlightExpression, doOnDeleteHighlightExpression, doOnEditHighlightExpression,
-              Option(new StyleListViewRenderer(bundle)))
+              doOnAddHighlightExpression, doOnDeleteHighlightExpression, doOnEditHighlightExpression)
           })
     }
   }
@@ -63,16 +64,8 @@ object HighlightMenu extends Menu("Highlight") {
   }
 
   // Styles
-  private def highlightList(bundle: LogViewBundle): Seq[Label] = {
-
-    (for (style <- bundle.styles)
-      yield new Label(style.exp) {
-      background = style.bgColor
-      foreground = style.fgColor
-      opaque = true
-      horizontalAlignment = Alignment.Left
-    }).toSeq
-
+  private def highlightList(bundle: LogViewBundle): Seq[ExpDialogPanel] = {
+    bundle.styles.map(new ExpDialogPanel(_)).toSeq
   }
 
   private def doOnAddHighlightExpression(bundle: LogViewBundle) {
@@ -89,31 +82,4 @@ object HighlightMenu extends Menu("Highlight") {
     bundle.styles -= expression
     bundle.logViewFrame.reloadData
   }
-
-  class StyleListViewRenderer(bundle: LogViewBundle) extends ListView.Renderer[Label] {
-    override def componentFor(list: ListView[_], isSelected: Boolean, focused: Boolean, a: Label, index: Int): Component = {
-      val style = bundle.sc.getStyle(a.text)
-      if (isSelected) {
-        if (style != null) {
-          a.foreground = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Background).asInstanceOf[Color]
-          a.background = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Foreground).asInstanceOf[Color]
-          a.horizontalAlignment = Alignment.Right
-        } else {
-          a.background = Color.BLUE
-          a.foreground = Color.WHITE
-        }
-      } else {
-        if (style != null) {
-          a.background = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Background).asInstanceOf[Color]
-          a.foreground = bundle.sc.getStyle(a.text).getAttribute(StyleConstants.Foreground).asInstanceOf[Color]
-          a.horizontalAlignment = Alignment.Left
-        } else {
-          a.background = Color.WHITE
-          a.foreground = Color.BLACK
-        }
-      }
-      a
-    }
-  }
-
 }
