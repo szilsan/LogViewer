@@ -1,20 +1,19 @@
 package com.ftl.logview.gui
+
+import java.awt.Color
 import java.awt.Dimension
-import scala.annotation.implicitNotFound
+
+import scala.collection.mutable.ListBuffer
 import scala.swing.event.ButtonClicked
 import scala.swing.BorderPanel
 import scala.swing.Button
+import scala.swing.Component
 import scala.swing.Dialog
 import scala.swing.FlowPanel
-import scala.swing.Label
 import scala.swing.ListView
-import com.ftl.logview.LogViewBundle
+
 import com.ftl.logview.model.Highlighted
-import javax.swing.text.StyleConstants
-import java.awt.Color
-import scala.swing.Alignment
-import scala.swing.Component
-import scala.swing.Panel
+import com.ftl.logview.LogViewBundle
 
 /**
  * Show skipped expressions.
@@ -73,10 +72,28 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
     }
   }
 
+  val btnUp = new Button("Up") {
+    reactions += {
+      case ButtonClicked(b) => {
+        doOnUp
+      }
+    }
+  }
+
+  val btnDown = new Button("Down") {
+    reactions += {
+      case ButtonClicked(b) => {
+        doOnDown
+      }
+    }
+  }
+
   contents = new BorderPanel {
     layout(expList) = BorderPanel.Position.Center
 
     layout(new FlowPanel() {
+      contents += btnUp
+      contents += btnDown
       contents += btnAdd
       contents += btnEdit
       contents += btnDel
@@ -92,7 +109,30 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
     expList.listData = data
   }
 
-  def doOnButtonClicked(action: (LogViewBundle, Highlighted) => Unit) {
+  private def doOnUp() {
+    doOnButtonClicked((bundle: LogViewBundle, style: Highlighted) => {
+      moveUpByOne(expList.selection.items.head.style, bundle.styles)
+    })
+  }
+
+  private def doOnDown() {
+    moveDownByOne(expList.selection.items.head.style, bundle.styles)
+  }
+  
+  private def moveDownByOne( movingStyle: Highlighted, list: ListBuffer[Highlighted]) = moveInList(-1, movingStyle, list)
+  private def moveUpByOne( movingStyle: Highlighted, list: ListBuffer[Highlighted]) = moveInList(1, movingStyle, list)
+
+  private def moveInList(index: Int, movingStyle: Highlighted, list: ListBuffer[Highlighted]) {
+    require(index < 0 || list.size > index, movingStyle != null)
+    val removePos = list.findIndexOf(_ == movingStyle)
+    if ((removePos+index == list.size && index > 0) || (removePos == 0 && index < 0)) {}
+    else {
+      list.remove(removePos)
+      list.insert(removePos + index, movingStyle)
+    }
+  }
+
+  private def doOnButtonClicked(action: (LogViewBundle, Highlighted) => Unit) {
     if (expList.selection.items.isEmpty) {
       Dialog.showMessage(null, "No expressions is selected", "Warning", Dialog.Message.Warning)
     } else {
