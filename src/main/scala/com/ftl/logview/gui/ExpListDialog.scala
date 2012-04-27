@@ -2,7 +2,6 @@ package com.ftl.logview.gui
 
 import java.awt.Color
 import java.awt.Dimension
-
 import scala.collection.mutable.ListBuffer
 import scala.swing.event.ButtonClicked
 import scala.swing.BorderPanel
@@ -11,9 +10,11 @@ import scala.swing.Component
 import scala.swing.Dialog
 import scala.swing.FlowPanel
 import scala.swing.ListView
-
 import com.ftl.logview.model.Highlighted
 import com.ftl.logview.LogViewBundle
+import scala.swing.GridPanel
+import java.awt.GridLayout
+import scala.swing.Label
 
 /**
  * Show skipped expressions.
@@ -91,13 +92,19 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
   contents = new BorderPanel {
     layout(expList) = BorderPanel.Position.Center
 
-    layout(new FlowPanel() {
-      contents += btnUp
-      contents += btnDown
-      contents += btnAdd
-      contents += btnEdit
-      contents += btnDel
-      contents += btnOk
+    layout(new GridPanel(2, 1) {
+      contents += new FlowPanel() {
+        contents += btnUp
+        contents += btnDown
+      }
+
+      contents += new FlowPanel() {
+        contents += btnAdd
+        contents += btnEdit
+        contents += btnDel
+        contents += btnOk
+      }
+
     }) = BorderPanel.Position.South
   }
 
@@ -118,14 +125,14 @@ class ExpListDialog(dialogTitle: String = "Expressions", bundle: LogViewBundle,
   private def doOnDown() {
     moveDownByOne(expList.selection.items.head.style, bundle.styles)
   }
-  
-  private def moveDownByOne( movingStyle: Highlighted, list: ListBuffer[Highlighted]) = moveInList(-1, movingStyle, list)
-  private def moveUpByOne( movingStyle: Highlighted, list: ListBuffer[Highlighted]) = moveInList(1, movingStyle, list)
+
+  private def moveDownByOne(movingStyle: Highlighted, list: ListBuffer[Highlighted]) = moveInList(1, movingStyle, list)
+  private def moveUpByOne(movingStyle: Highlighted, list: ListBuffer[Highlighted]) = moveInList(-1, movingStyle, list)
 
   private def moveInList(index: Int, movingStyle: Highlighted, list: ListBuffer[Highlighted]) {
     require(index < 0 || list.size > index, movingStyle != null)
     val removePos = list.findIndexOf(_ == movingStyle)
-    if ((removePos+index == list.size && index > 0) || (removePos == 0 && index < 0)) {}
+    if ((removePos + index == list.size && index > 0) || (removePos == 0 && index < 0)) {}
     else {
       list.remove(removePos)
       list.insert(removePos + index, movingStyle)
